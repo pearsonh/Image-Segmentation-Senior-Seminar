@@ -10,4 +10,4 @@ def load_image(filename):
     return returnimg
 
 def save_image(filename,image):
-  scipy.misc.imsave(filename,image)
+    scipy.misc.imsave(filename,image)
