@@ -1,15 +1,16 @@
+import numpy as np
+
 def euclideanDistance(x1,y1,x2,y2):
     return ((x1-x2)**2+(y1-y2)**2)**(.5)
 
 def createListOfEdgePixels(segmentation):
     out = []
-    length = len(segmentation)
-    height = len(segmentation[0])
+    height,length = segmentation.shape
     for i in range(length):
         for j in range(height):
             for x,y in [(i-1,j),(i+1,j),(i,j-1),(i,j+1)]:
                 if (x>=0 and y>=0 and x<length and y<height):
-                    if (segmentation[x][y] != segmentation[i][j]):
+                    if (segmentation[y,x] != segmentation[j,i]):
                         out.append((i,j))
                         break
     return out
@@ -25,8 +26,7 @@ def findNearestEdgePixel(pixel, edges):
     return closest, bestDistance
 
 def bde(segmentation,groundtruth):
-    length = len(segmentation)
-    height = len(segmentation[0])
+    height,length = segmentation.shape
     segEdges = createListOfEdgePixels(segmentation)
     truEdges = createListOfEdgePixels(groundtruth)
     totalDistance = 0
