@@ -66,3 +66,7 @@ def cluster(image, centroids):
 #image = Image.open("1obj/100_0109/src_color/100_0109.png")
 #np.set_printoptions(threshold=np.inf)
 #print(kmeans(image, 2))
+#image = Image.open("22093.jpg")
+#np.set_printoptions(threshold=np.inf)
+#final = Image.fromarray(kmeans(image, 4) * (255 / 4))
+#final.show()
