@@ -26,21 +26,15 @@ def import_berkeley(filename):
         for i in range(int(start),int(end)+1):
             segarray[int(row),i] = int(seg)
     return segarray
-
-def import_weizmann_1(filename):
+def import_weizmann(filename):
     '''Given the path to a file containing a Weizmann encoding of a segmentation,
     returns the numpy version of that segmentation'''
     image = Image.open(filename)
     image_matrix=np.array(image)
-    for i in range(image.height):
-        for j in range(image.width):
-            rgb=image_matrix[i][j]
-            if (rgb[0] != rgb[1]) or (rgb[1] != rgb[2]) or (rgb[2] != rgb[0]):
-                print("seg")
-                image_matrix[i][j]=1
-            else:
-                image_matrix[i][j]=0
-    print(image_matrix)
+    segmentedmin = np.argmin(image_matrix, axis=2)
+    segmentedmax = np.argmax(image_matrix, axis=2)
+    segmented=np.add(segmentedmin, segmentedmax)/2
+    return segmented
 
 def display_segmentation(image,number_of_segmentations):
     '''given a numpy array with a segmentation, displays that segmentation'''
