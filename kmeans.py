@@ -5,11 +5,31 @@ import numpy as np
 from operator import add
 from operator import sub
 import time
+from scipy.spatial import distance
+
+#kmeans extensions:
+# --random seeds, run multiple times and average
+# --chosen seeds somehow: pick first at random, use prob function to place laters far away
+# --use physical distance as well as rgb??? normalize, play with weights?
+# --probabilistic (expectation maximization)
+# --histograms to determine k
+# --elbow method to determine k: run for 1<k<10, plot within-cluster sum of squares, look for "elbow"
+
+
+#distance metrics:
+#__euclidean: standard root of summed squares
+#--manhattan: sum of abs differences
+#__mahalanobis: more flexible, less circular? euclidean divided by squared variance
+#__alternative color measure: HSV
 
 def kmeans(image, k):
     '''Runs kmeans segmentation on the given image into k segments
     '''
     img=np.array(image).astype("int")
+    #covariance for mahalanobis
+    #reshaped=np.reshape(img, (img.shape[0]*img.shape[1],3))
+    #covariance=np.cov(reshaped, rowvar=False)
+    #print(covariance)
     centroids = []
     centroid_means = np.zeros((k,3))
     #assigns k random starting centroids
@@ -34,19 +54,24 @@ def kmeans(image, k):
         old_means=centroid_means
     return image_matrix
 
-def find_closest_centroid(rgb, centroids, centroid_totals, centroid_total_counts):
+def euclidean(centroid, pixel):
+    x=(centroid[0]-pixel[0])**2
+    y=(centroid[1]-pixel[1])**2
+    z=(centroid[2]-pixel[2])**2
+    #technically distance is the sqrt of x+y+z, but for comparison it doesn't matter
+    #dist=math.sqrt(x+y+z)
+    return x+y+z
+
+def find_closest_centroid(pixel, centroids, centroid_totals, centroid_total_counts):
     '''Finds which cluster each pixel would currently belong to,
     and updates the running totals of pixel values and counts per cluster'''
     distances = []
     for value in centroids:
-        x=(value[0]-rgb[0])**2
-        y=(value[1]-rgb[1])**2
-        z=(value[2]-rgb[2])**2
-        #technically distance is the sqrt of x+y+z, but for comparison it doesn't matter
-        #dist=math.sqrt(x+y+z)
-        distances.append(x+y+z)
+        #possibly mahalanobis is a better distance calculation according to research, but doesn't actually seem better and is very slow
+        #distances.append(distance.mahalanobis(value, pixel, covariance))
+        distances.append(euclidean(value, pixel))
     ind = np.argmin(distances)
-    centroid_totals[ind]+=rgb
+    centroid_totals[ind]+=pixel
     centroid_total_counts[ind]+=1
     return float(ind)
 
@@ -77,6 +102,8 @@ def cluster(image, centroids):
 if __name__ == "__main__":
     start=time.time()
     img = Image.open("22093.jpg")
+    #HSV is potentially better than rgb, needs more testing
+    img=img.convert("HSV")
     img = Image.fromarray(kmeans(img, 4)*200)
     stop=time.time()
     print("runtime is", stop-start)
