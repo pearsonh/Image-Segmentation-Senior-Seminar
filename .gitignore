@@ -3,3 +3,4 @@ __pycache__/
 .*.jpg
 *.7a*
 *.DS_Store
+._*
