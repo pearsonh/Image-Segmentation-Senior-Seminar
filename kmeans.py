@@ -7,14 +7,21 @@ from operator import sub
 import time
 from scipy.spatial import distance
 
-#kmeans extensions:
+#seeds:
 # --random seeds, run multiple times and average
 # --chosen seeds somehow: pick first at random, use prob function to place laters far away
-# --use physical distance as well as rgb??? normalize, play with weights?
-# --probabilistic (expectation maximization)
-# __histograms to determine k
+
+#features:
+# __use physical distance as well as rgb??? normalize, play with weights?
+# -- texture?
+
+#determining k:
+# __histograms to determine k (mean shift?)
 # --elbow method to determine k: run for 1<k<10, plot within-cluster sum of squares, look for "elbow"
 
+#misc:
+# --probabilistic (expectation maximization)
+# --smoothing
 
 #distance metrics:
 #__euclidean: standard root of summed squares
@@ -66,56 +73,96 @@ def shift(value, pixels, bandwidth):
     #print(total)
     return shifts/total
 
-def kmeans(image, k):
-    '''Runs kmeans segmentation on the given image into k segments
-    '''
+def random_seed_locations(k, image):
     random.seed(0)
-    img=np.array(image).astype("int")
-    #covariance for mahalanobis
-    #reshaped=np.reshape(img, (img.shape[0]*img.shape[1],3))
-    #covariance=np.cov(reshaped, rowvar=False)
-    #print(covariance)
-    #centroids = np.zeros((k,2))
-    centroids = np.zeros((k,5))
-    centroid_means = np.zeros((k,3))
-    #assigns k random starting centroids
+    centroids = np.zeros((k,2))
     for i in range(k):
         new = [0,0]
         new[0] = random.randrange(image.width)
         new[1] = random.randrange(image.height)
-        new = np.append(img[new[1]][new[0]], new)
         #checks to avoid duplicate centroids
         while new in centroids:
             new = [0,0]
             new[0] = random.randrange(image.width)
             new[1] = random.randrange(image.height)
-            new = np.append(img[new[1]][new[0]], new)
         centroids[i]=new
-        #centroid_means[i]=new[:3]
-        #centroid_means[i]=img[new[1],new[0]]
-    #print(centroids)
-    old_means=np.zeros((len(centroid_means),5))
+    return centroids
+def random_seed_values(k, image):
+    random.seed(0)
+    centroids = np.zeros((k,2))
+    values = np.zeros((k,3))
+    for i in range(k):
+        new = [0,0]
+        new[0] = random.randrange(image.shape[0])
+        new[1] = random.randrange(image.shape[1])
+        #checks to avoid duplicate centroids
+        while new in centroids:
+            new = [0,0]
+            new[0] = random.randrange(image.shape[0])
+            new[1] = random.randrange(image.shape[1])
+        centroids[i]=new
+        values[i] = image[new[0],new[1]]
+    return values
+def probabilistic_seed_values(k, image):
+    random.seed(0)
+    values = np.zeros((k,3))
+    new = [0, 0, 0]
+    new[0] = random.randrange(256)
+    new[1] = random.randrange(256)
+    new[2] = random.randrange(256)
+    values[0]=new
+    c1 = np.ndarray.flatten(image[:,:,0])
+    c2 = np.ndarray.flatten(image[:,:,1])
+    c3 = np.ndarray.flatten(image[:,:,2])
+    #dist to 1: the higher the more likely
+    #dist to 2: same etc.
+    #each iteration: calc distance to most recent
+    #add to totals
+    #pick (choice) with normalized dists as weights
+    for i in range(1, k):
+        new = [0, 0, 0]
+        new[0] = np.random.choice(c1, p=np.absolute(c1-values[0][0]))
+        print(new)
+
+
+        #checks to avoid duplicate centroids
+        #while new in centroids:
+        #    new = [0,0]
+        #    new[0] = random.randrange(image.shape[0])
+        #    new[1] = random.randrange(image.shape[1])
+
+    return values
+
+def kmeans(image, k):
+    '''Runs kmeans segmentation on the given image into k segments
+    '''
+    img=np.array(image).astype("int")
+    #covariance for mahalanobis
+    #reshaped=np.reshape(img, (img.shape[0]*img.shape[1],3))
+    #covariance=np.cov(reshaped, rowvar=False)
+    #print(covariance)
+    centroid_values=probabilistic_seed_values(k,img)
+    #old_means=np.zeros((len(centroid_means),5))
+    old_means=np.zeros((k,3))
     #continously updates the centroids and cluster assignments
     while True:
-        image_matrix, centroids = cluster(img, centroids)
-        print(centroids-old_means)
+        image_matrix, centroid_values = cluster(img, centroid_values)
+        print(centroid_values-old_means)
         #accepts the image matrix if no centroid value has changed by more than 1.0
-        if np.allclose(centroids, old_means, atol=1.0, rtol=0.0):
+        if np.allclose(centroid_values, old_means, atol=1.0, rtol=0.0):
             return image_matrix
-        old_means=centroids
+        old_means=centroid_values
     return image_matrix
 
 def euclidean_color_and_distance(centroid, pixel, shape):
     h=(centroid[0]-pixel[0])**2
     s=(centroid[1]-pixel[1])**2
     v=(centroid[2]-pixel[2])**2
-    #y=((centroid[3]-pixel[3])*255/shape[0])**2
-    #x=(centroid[4]-pixel[4]*255/shape[1])**2
+    y=((centroid[3]-pixel[3])*255/shape[0])**2
+    x=(centroid[4]-pixel[4]*255/shape[1])**2
     color = h+s+v
-    #dist = x+y
-    #technically distance is the sqrt of x+y+z, but for comparison it doesn't matter
-    #dist=math.sqrt(x+y+z)
-    return math.sqrt(color)#/math.sqrt(dist)
+    dist = x+y
+    return math.sqrt(color) + math.sqrt(dist)
 
 def euclidean_color_only(centroid, pixel):
     #need to normalize for hsv
@@ -133,7 +180,7 @@ def find_closest_centroid(pixel, centroids, centroid_totals, centroid_total_coun
     for value in centroids:
         #possibly mahalanobis is a better distance calculation according to research, but doesn't actually seem better and is very slow
         #distances.append(distance.mahalanobis(value, pixel, covariance))
-        distances.append(euclidean_color_and_distance(value, pixel, shape))
+        distances.append(euclidean_color_only(value, pixel))
     ind = np.argmin(distances)
     centroid_totals[ind]+=pixel
     centroid_total_counts[ind]+=1
@@ -145,14 +192,16 @@ def cluster(image, centroids):
     pixels to their new closest clusters, and updates cluster centroids.
     Returns a matrix of pixel cluster assingments and the updated centroid values
     '''
-    centroid_totals = np.zeros((len(centroids),5))
+    #centroid_totals = np.zeros((len(centroids),5))
+    centroid_totals = np.zeros((len(centroids),3))
     centroid_total_counts = np.zeros(len(centroids))
     image_matrix = np.zeros((len(image), len(image[0])))
     #currently it is quicker to loop and call the function rather than use numpy
     #image_matrix=np.apply_along_axis(find_closest_centroid, -1, image, centroids, centroid_totals, centroid_total_counts)
     for i in range(image.shape[0]):
         for j in range(image.shape[1]):
-            current=np.append(image[i][j], [i,j])
+            #current=np.append(image[i][j], [i,j])
+            current = image[i][j]
             image_matrix[i][j] = find_closest_centroid(current, centroids, centroid_totals, centroid_total_counts, image_matrix.shape)
     #cluster_means=np.zeros
     #currently it is quicker to loop rather than use numpy indexing
