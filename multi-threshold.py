@@ -1,6 +1,7 @@
 from PIL import Image
 import numpy as np
 from skimage.filters import threshold_otsu
+import os
 
 def otsu_greyspace_thresholding(image):
     #Creates a greyscale version of the input image
@@ -11,11 +12,23 @@ def otsu_greyspace_thresholding(image):
     threshold = get_histogram_threshold(imageGrey)[0]
     print(threshold)
     returnImage = np.zeros(shape=(y,x))
+    segments = len(threshold)
     #Maps 1's and 0's based on whether the pixel values are above or below the threshold.
-    for j in range(x):
-        for i in range(y):
-            returnImage[i,j] = 1 if imageGrey.getpixel((j,i)) > threshold else 0
-    return returnImage
+    if len(threshold) is 1:
+        for j in range(x):
+            for i in range(y):
+                returnImage[i,j] = 1 if imageGrey.getpixel((j,i)) > threshold else 0
+    else:
+        for j in range(x):
+            for i in range(y):
+                if imageGrey.getpixel((j,i)) < threshold[0]:
+                    returnImage[i,j] = 0
+                if imageGrey.getpixel((j,i)) > threshold[0]:
+                    returnImage[i,j] = 1
+                if imageGrey.getpixel((j,i)) > threshold[1]:
+                    returnImage[i,j] = 2
+
+    return returnImage, segments
 
 def otsu_color_thresholding(image):
 
@@ -27,7 +40,6 @@ def otsu_color_thresholding(image):
 
 def get_histogram_threshold(image):
     a = np.array(image.histogram())
-    print(a)
     return np.where(a == threshold_otsu(a))
 
 def create_image(threshold, image, color):
@@ -56,8 +68,18 @@ def get_color_thresholds(image, color):
         a = np.array(image.histogram()[512:768])
     return np.where(a == threshold_otsu(a))
 
+def segment_all_images():
+    location = "C:/Users/brydu/OneDrive/Desktop/Comps/Image-Segmentation-Senior-Seminar/BSDS300-images/BSDS300/images/test/"
+    files = os.listdir(location)
+    for file in files:
+        img = Image.open(location + file)
+        temp, segments = otsu_greyspace_thresholding(img)
+        img = Image.fromarray(temp * (255 / segments))
+        img = img.convert("L")
+        img.save("C:/Users/brydu/OneDrive/Desktop/Comps/Image-Segmentation-Senior-Seminar/threshold_segments/segmentation" + file)
+
 if __name__ == "__main__":
-    img = Image.open("test_image.jpg")
+    '''img = Image.open("test_image.jpg")
     new_image = Image.fromarray(otsu_greyspace_thresholding(img)*200)
     new_image.show()
     images = []
@@ -67,4 +89,5 @@ if __name__ == "__main__":
         new_image.show()
         images.append(new_image)
     new_image = Image.merge("RGB", tuple(images))
-    new_image.show();
+    new_image.show();'''
+    segment_all_images()
