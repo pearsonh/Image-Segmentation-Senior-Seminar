@@ -2,22 +2,19 @@ from PIL import Image
 import numpy as np
 from collections import deque
 
-
-
-
 def naive_watershed(image):
     #Creates a greyscale version of the input image
     imageGrey = image.convert(mode="L")
-    imageGrey = np.array(imageGrey.getdata()).reshape(imageGrey.size[0], imageGrey.size[1], 1)
-    width, height, _  = imageGrey.shape
-    getNeighbors = lambda x,y: [i for i in [(x,y+1),(x,y-1),(x+1,y),(x-1,y)] if (i[0] >= 0 and i[1] >= 0 and i[0] < width and i[1] < height)]
+    imageGrey = np.array(imageGrey.getdata()).reshape(imageGrey.size[1],imageGrey.size[0])
+    height, width = imageGrey.shape
+    getNeighbors = lambda x,y: [i for i in [(x,y+1),(x,y-1),(x+1,y),(x-1,y)] if (i[0] >= 0 and i[1] >= 0 and i[0] < height and i[1] < width)]
     curLabel = 2 # 0 is unlabelled. 1 is WALL
     pix = [deque() for i in range(256)]
-    for x in range(width):
-        for y in range(height):
+    for x in range(height):
+        for y in range(width):
             pix[int(imageGrey[(x,y)])].append((x,y))
-    labelImage = np.zeros(shape=(width,height))
-    returnImage = np.zeros(shape=(width,height))
+    labelImage = np.zeros(shape=(height,width))
+    returnImage = np.zeros(shape=(height,width))
     for val in range(256):
         while True:
             try:
