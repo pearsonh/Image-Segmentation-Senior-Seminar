@@ -39,39 +39,25 @@ def naive_watershed(image):
                     if curLab != label:
                         label = 1
                         break
-            #print("we")
             for pixel in pixList:
-                #print(pixel, label)
                 labelImage[pixel] = label
                 if label == 1:
                     returnImage[pixel] = 1
-    #print(returnImage)
-    #print(labelImage)
-    #print(imageGrey)
-    print(curLabel)
     return returnImage
 
 def getClumpAndLowNeighbors(img,pix,neighb):
-    #print()
-    #print(pix)
     val = img[pix]
     pixlist = [pix]
     neighbors = []
     stack = neighb(*pix)
     while len(stack) > 0:
-        #print("AUDITION:")
         nextpix = stack.pop()
-        #print(nextpix)
         if ((val == img[nextpix]) and (nextpix not in pixlist)):
             pixlist.append(nextpix)
             for i in neighb(*nextpix):
                 stack.append(i)
         elif ((val > img[nextpix]) and (nextpix not in neighbors)):
             neighbors.append(nextpix)
-    #print("and the gang:")
-    #print(pixlist)
-    #print("and their neighbors")
-    #print(neighbors)
     return pixlist, neighbors
 
 if __name__ == "__main__":
