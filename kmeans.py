@@ -123,18 +123,22 @@ def probabilistic_seed_values(k, image):
     #each iteration: calc distance to most recent
     #add to totals
     #pick (choice) with normalized dists as weights
+    img2=np.reshape(image, (image.shape[0]*image.shape[1],3))
+    img_index=np.arange(img2.shape[0])
     for i in range(1, k):
         new = [0, 0, 0]
-        new[0] = np.random.choice(c1, p=np.absolute(c1-values[0][0]))
-        print(new)
-
-
+        distances=distance.cdist(img2, np.array([values[i-1]]))
+        probabilities=distances/np.sum(distances)
+        #p should equal probabilities, normalized
+        index = np.random.choice(img_index, p=probabilities)
+        values[i]=img2[index]
+        print(values[i])
         #checks to avoid duplicate centroids
-        #while new in centroids:
+        #while new in values:
         #    new = [0,0]
         #    new[0] = random.randrange(image.shape[0])
         #    new[1] = random.randrange(image.shape[1])
-
+    print(values)
     return values
 
 def kmeans(image, k, features='rgb', seed='random'):
@@ -233,7 +237,7 @@ if __name__ == "__main__":
     #HSV is potentially better than rgb, needs more testing
     #img=img.convert("HSV")
     #img=Image.fromarray(mean_shift(img, 50)*200)
-    img=kmeans(img, 4)
+    img=kmeans(img, 4, seed="prob")
     print(img)
     img = Image.fromarray(img*30)
     stop=time.time()
