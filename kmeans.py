@@ -9,7 +9,7 @@ from scipy.spatial import distance
 
 #seeds:
 # --random seeds, run multiple times and average
-# --chosen seeds somehow: pick first at random, use prob function to place laters far away
+# __chosen seeds somehow: pick first at random, use prob function to place laters far away
 
 #features:
 # __use physical distance as well as rgb??? normalize, play with weights?
@@ -110,14 +110,12 @@ def random_seed_values(k, image):
 def probabilistic_seed_values(k, image):
     random.seed(0)
     values = np.zeros((k,3))
+    #might want to switch this to geographic?
     new = [0, 0, 0]
     new[0] = random.randrange(256)
     new[1] = random.randrange(256)
     new[2] = random.randrange(256)
     values[0]=new
-    c1 = np.ndarray.flatten(image[:,:,0])
-    c2 = np.ndarray.flatten(image[:,:,1])
-    c3 = np.ndarray.flatten(image[:,:,2])
     #dist to 1: the higher the more likely
     #dist to 2: same etc.
     #each iteration: calc distance to most recent
@@ -125,20 +123,15 @@ def probabilistic_seed_values(k, image):
     #pick (choice) with normalized dists as weights
     img2=np.reshape(image, (image.shape[0]*image.shape[1],3))
     img_index=np.arange(img2.shape[0])
+    total_distances=np.zeros(img2.shape[0])
     for i in range(1, k):
-        new = [0, 0, 0]
-        distances=distance.cdist(img2, np.array([values[i-1]]))
-        probabilities=distances/np.sum(distances)
+        distances=distance.cdist(img2, np.array([values[i-1]]))[:,0]
+        total_distances+=distances
+        probabilities=total_distances/np.sum(total_distances)
+        #think this should work? each distance is weighted equally, higher is better
         #p should equal probabilities, normalized
         index = np.random.choice(img_index, p=probabilities)
         values[i]=img2[index]
-        print(values[i])
-        #checks to avoid duplicate centroids
-        #while new in values:
-        #    new = [0,0]
-        #    new[0] = random.randrange(image.shape[0])
-        #    new[1] = random.randrange(image.shape[1])
-    print(values)
     return values
 
 def kmeans(image, k, features='rgb', seed='random'):
@@ -159,6 +152,7 @@ def kmeans(image, k, features='rgb', seed='random'):
     else:
         #in progress
         centroids=probabilistic_seed_values(k,img)
+        old_means=np.zeros((k,3))
     #continously updates the centroids and cluster assignments
     while True:
         image_matrix, centroids = cluster(img, centroids, features)
