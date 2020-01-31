@@ -1,4 +1,5 @@
 from PIL import Image
+from PIL import ImageFilter
 import numpy as np
 from collections import deque
 
@@ -6,10 +7,11 @@ def naive_watershed(image):
     #Creates a greyscale version of the input image
     imageGrey = image.convert(mode="L")
     imageGrey = np.array(imageGrey.getdata()).reshape(imageGrey.size[1],imageGrey.size[0])
+    #imageGrey = np.round(imageGrey,-1)
     height, width = imageGrey.shape
     getNeighbors = lambda x,y: [i for i in [(x,y+1),(x,y-1),(x+1,y),(x-1,y)] if (i[0] >= 0 and i[1] >= 0 and i[0] < height and i[1] < width)]
     curLabel = 2 # 0 is unlabelled. 1 is WALL
-    pix = [deque() for i in range(256)]
+    pix = [deque() for i in range(256+5)]
     for x in range(height):
         for y in range(width):
             pix[int(imageGrey[(x,y)])].append((x,y))
@@ -62,5 +64,6 @@ def getClumpAndLowNeighbors(img,pix,neighb):
 
 if __name__ == "__main__":
     img = Image.open("22093.jpg")
+    img = img.filter(ImageFilter.GaussianBlur(2))
     img = Image.fromarray(naive_watershed(img)*220)
     img.show()
