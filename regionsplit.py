@@ -13,8 +13,7 @@ class regionSplitTree:
         return self.root.split(threshold)
 
     def merge(self, threshold):
-
-        return
+        return self.root.merge(threshold)
 
 class quadNode:
     def __init__(self, data, parent=None, tr=None, tl=None, br=None, bl=None):
@@ -24,8 +23,19 @@ class quadNode:
         self.bottomRight = br
         self.bottomLeft = bl
 
+    def flatTest(self, array, threshold):
+        x, y = len(array), len(array[0])
+        mean = []
+        for j in range(x):
+            for k in range(y):
+                mean.append(array[j,k])
+        if len(mean) <= 4 or math.sqrt(stat.variance(mean, None)) <= threshold:
+            return True
+        else:
+            return False
+
     def split(self, threshold):
-        if flatTest(self.data, threshold):
+        if self.flatTest(self.data, threshold):
             return self
         else:
             self.topRight = quadNode(self.data[:len(self.data)//2, :len(self.data)//2], self)
@@ -39,24 +49,18 @@ class quadNode:
             self.data = []
             return self
 
-    def flatTest(self, array, threshold):
-        x, y = len(array), len(array[0])
-        mean = []
-        for j in range(x):
-            for k in range(y):
-                mean.append(array[j,k])
-        if len(mean) <= 4 or math.sqrt(stat.variance(mean, None)) <= threshold:
-            return True
-        else:
-            return False
-
 
 def regionSplit(image, threshold):
     imageGrey = image.convert(mode='L')
-    imgTree = regionSplitTree(quadNode(np.array(imageGrey).astype('int')))
-    return imgTree.split(threshold)
+    '''imgTree = regionSplitTree(quadNode(np.array(imageGrey).astype('int')))
+    print(imgTree.root)
+    imgTree.split(threshold)
+    imgTree.merge(threshold)'''
+    img = np.array(imageGrey).astype("int")
+    imgTree = split(img, threshold)
+    return imgTree
 
-'''def split(img, threshold):
+def split(img, blank, threshold):
     if flatTest(img, threshold):
         return img
     else:
@@ -65,7 +69,7 @@ def regionSplit(image, threshold):
         splitGraph.append(split(img[:len(img)//2, len(img)//2:], threshold))
         splitGraph.append(split(img[len(img)//2:, :len(img)//2], threshold))
         splitGraph.append(split(img[len(img)//2:, len(img)//2:], threshold))
-        return splitGraph'''
+        return splitGraph
 
 def merge(splitGraph, threshold, imageArray):
     x, y = imageArray.shape
@@ -74,7 +78,6 @@ def merge(splitGraph, threshold, imageArray):
         layer = splitGraph
         while type(layer) != np.ndarray:
             layer = layer[i]
-
     return mergeImage
 
 def flatTest(array, threshold):
@@ -91,4 +94,4 @@ def flatTest(array, threshold):
 
 if __name__ == '__main__':
     img = Image.open("22093.jpg")
-    print(regionSplit(img, 50).data)
+    print(regionSplit(img, 50)[0][0][0][0][2][2][3][3].shape)
