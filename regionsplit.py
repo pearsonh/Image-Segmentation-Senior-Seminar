@@ -57,19 +57,31 @@ def regionSplit(image, threshold):
     imgTree.split(threshold)
     imgTree.merge(threshold)'''
     img = np.array(imageGrey).astype("int")
-    imgTree = split(img, threshold)
+    imgTree = split(img, np.empty(img.shape), threshold)
     return imgTree
 
 def split(img, blank, threshold):
     if flatTest(img, threshold):
-        return img
+        return blank
     else:
-        splitGraph = []
-        splitGraph.append(split(img[:len(img)//2, :len(img)//2], threshold))
-        splitGraph.append(split(img[:len(img)//2, len(img)//2:], threshold))
-        splitGraph.append(split(img[len(img)//2:, :len(img)//2], threshold))
-        splitGraph.append(split(img[len(img)//2:, len(img)//2:], threshold))
-        return splitGraph
+        x,y = img.shape
+        '''print(str(x), str(y))'''
+        regVal = img[0][0]
+        for i in range(x):
+            for j in range(y):
+                if i <= x//2 and j < y//2:
+                    blank[i][j] = np.mean(img[:len(img)//2, :len(img)//2])
+                elif i <= x//2 and j > y//2:
+                    blank[i][j] = np.mean(img[:len(img)//2, len(img)//2:])
+                elif i > x//2 and j <= y//2:
+                    blank[i][j] = np.mean(img[len(img)//2:, :len(img)//2])
+                elif i > x//2 and j >= y//2:
+                    blank[i][j] = np.mean(img[len(img)//2, len(img)//2:])
+        split(img[:len(img)//2, :len(img)//2], blank[:len(blank)//2, :len(blank)//2], threshold)
+        split(img[:len(img)//2, len(img)//2:], blank[:len(blank)//2, len(blank)//2:], threshold)
+        split(img[len(img)//2:, :len(img)//2], blank[len(blank)//2:, :len(blank)//2], threshold)
+        split(img[len(img)//2:, len(img)//2:], blank[len(blank)//2:, len(blank)//2:], threshold)
+        return blank
 
 def merge(splitGraph, threshold, imageArray):
     x, y = imageArray.shape
@@ -86,12 +98,14 @@ def flatTest(array, threshold):
     for j in range(x):
         for k in range(y):
             mean.append(array[j,k])
-    if len(mean) <= 4 or math.sqrt(stat.variance(mean, None)) <= threshold:
+    if len(mean) <= 4 or stat.variance(mean, None) <= threshold:
         return True
     else:
+        '''print(math.sqrt(stat.variance(mean, None)))'''
         return False
 
 
 if __name__ == '__main__':
     img = Image.open("22093.jpg")
-    print(regionSplit(img, 50)[0][0][0][0][2][2][3][3].shape)
+    newImage = Image.fromarray(regionSplit(img, 1000))
+    newImage.show()
