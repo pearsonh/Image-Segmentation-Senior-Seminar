@@ -8,7 +8,7 @@ def naive_watershed(image):
     #Creates a greyscale version of the input image
     imageGrey = image.convert(mode="L")
     imageGrey = np.array(imageGrey.getdata()).reshape(imageGrey.size[1],imageGrey.size[0])
-    #imageGrey = imageGrey%3 #round
+    #imageGrey = imageGrey - imageGrey%18 #round
     height, width = imageGrey.shape
     getNeighbors = lambda x,y: [i for i in [(x,y+1),(x,y-1),(x+1,y),(x-1,y)] if (i[0] >= 0 and i[1] >= 0 and i[0] < height and i[1] < width)]
     curLabel = 2 # 0 is unlabelled. 1 is WALL
@@ -45,14 +45,15 @@ def naive_watershed(image):
             for pixel in pixList:
                 labelImage[pixel] = label
     
+    
     for x in range(height):
         for y in range(width):
             pixel = (x,y)
             if labelImage[pixel] == 1:
-                pixelsToDye, val = getClumpForDyeing(imageGrey,pixel,getNeighbors)
+                pixelsToDye, val = getClumpForDyeing(imageGrey,pixel,getNeighbors,labelImage)
                 for pixel in pixelsToDye:
-                    labelImage[pixel] = labelImage[val]
-
+                    labelImage[pixel] = val
+    
     colorkey = np.zeros((curLabel,3))
     for i in range(curLabel):
         colorkey[i] = (randrange(256),randrange(256),randrange(256))
@@ -62,7 +63,7 @@ def naive_watershed(image):
             returnImage[x,y] = colorkey[int(labelImage[pixel])]
     return returnImage
 
-def getClumpForDyeing(img,pix,neighb):
+def getClumpForDyeing(img,pix,neighb,labelimg):
     val = int(img[pix])
     pixlist = [pix]
     stack = neighb(*pix)
@@ -72,8 +73,8 @@ def getClumpForDyeing(img,pix,neighb):
             pixlist.append(nextpix)
             for i in neighb(*nextpix):
                 stack.append(i)
-        elif (nextpix not in pixlist):
-            dye = nextpix
+        elif (nextpix not in pixlist) and (labelimg[nextpix] != 1):
+            dye = labelimg[nextpix]
     return pixlist, dye
 
 def getClumpAndLowNeighbors(img,pix,neighb):
