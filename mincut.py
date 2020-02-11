@@ -3,10 +3,26 @@ from PIL import Image
 from scipy import *
 from scipy.sparse import *
 from scipy.sparse.linalg import *
+import time
+from eval import bde, region_based_eval
+from parser import import_berkeley
 
 # compute difference between two pixels in the np array of rgb tuples by euclidean
 # distance between rgb values (or replace with some other metric in this method)
 def differenceMetric(coords1, coords2, pixels):
+    rgb1 = pixels[coords1[0], coords1[1]]
+    rgb2 = pixels[coords2[0], coords2[1]]
+    featureDifference = (rgb1[0] - rgb2[0])**2 + (rgb1[1] - rgb2[1])**2 + (rgb1[2] - rgb2[2])**2
+    spatialDistance = (coords1[0] - coords2[0])**2 + (coords1[1] - coords2[1])**2
+    featureWeight = 1
+    spatialWeight = 1
+    #difference = math.exp(-(featureWeight * featureDifference + spatialWeight* spatialDistance))
+    difference = featureWeight * featureDifference + spatialWeight* spatialDistance
+    return difference
+
+# compute difference between two pixels in the np array of rgb tuples by euclidean
+# distance between rgb values (or replace with some other metric in this method)
+def differenceMetricSimple(coords1, coords2, pixels):
     rgb1 = pixels[coords1[0], coords1[1]]
     rgb2 = pixels[coords2[0], coords2[1]]
     return ((rgb1[0] - rgb2[0])**2 + (rgb1[1] - rgb2[1])**2 + (rgb1[2] - rgb2[2])**2)
@@ -19,7 +35,7 @@ def findEigens(D, W):
 
 # takes in an np array of pixels and returns a sparse adjacency matrix (csc_matrix) with edge weights for this image
 def pixelsToAdjMatrix(pixels):
-    r = 10
+    r = 16
     y,x,_ = pixels.shape #assuming tuples of 3 rgb values are the third coordinate of the shape
     N = x * y
     row = []
@@ -68,7 +84,14 @@ def mincut(img):
     return newEigIndicator
 
 if __name__ == "__main__":
-    img = Image.open("test.png")
-    img = Image.fromarray(mincut(img)*255, mode="L")
+    img = Image.open("24063.jpg")
+    start=time.time()
+    array = mincut(img)
+    stop=time.time()
+    print("runtime is", stop-start)
+    img = Image.fromarray(array*255, mode="L")
     img.show()
-    img.save("test-10-1s.jpg", "JPEG")
+    img.save("24063-16-newweight2.jpg", "JPEG")
+    groundTruth = import_berkeley("24063.seg")
+    print("region based is ", region_based_eval(groundTruth, array))
+    print("edge based is ", bde(groundTruth, array))
