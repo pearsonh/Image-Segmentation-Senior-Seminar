@@ -4,7 +4,7 @@ import numpy as np
 from collections import deque
 from random import randrange
 
-def naive_watershed(image):
+def naive_watershed(image,depththreshold):
     #Creates a greyscale version of the input image
     imageGrey = image.convert(mode="L")
     imageGrey = np.array(imageGrey.getdata()).reshape(imageGrey.size[1],imageGrey.size[0])
@@ -18,6 +18,7 @@ def naive_watershed(image):
             pix[int(imageGrey[(x,y)])].append((x,y))
     labelImage = np.zeros(shape=(height,width))
     returnImage = np.zeros(shape=(height,width,3))
+    listofmins = ["???","???"]
     for val in range(256):
         while True:
             try:
@@ -36,15 +37,47 @@ def naive_watershed(image):
             if len(labels) == 0:
                 label = curLabel
                 curLabel = curLabel + 1
+                listofmins.append(imageGrey[nextpix])
             else:
                 label = labels[0]
                 for curLab in labels:
                     if curLab != label:
                         label = 1
                         break
-            for pixel in pixList:
-                labelImage[pixel] = label
-    
+            if label != 1:
+                for pixel in pixList:
+                    labelImage[pixel] = label
+            else:
+                deepEnough = []
+                notDeepEnough = []
+                nextpixval = imageGrey[nextpix]
+                #sort through all neighbors
+                #separate out the ones that don't pass muster, from the ones that do
+                for neighbor in labels:
+                    if neighbor == 0:
+                        continue
+                    print(nextpixval, listofmins[int(neighbor)])
+                    if (nextpixval - listofmins[int(neighbor)] > depththreshold):
+                        deepEnough.append(neighbor)
+                    else:
+                        notDeepEnough.append(neighbor)
+                #if there are none that don't, proceed
+                if (len(notDeepEnough) == 0):
+                    for pixel in pixList:
+                        labelImage[pixel] = 1
+                    continue
+                else:
+                    if len(deepEnough) > 0:
+                        target = deepEnough[0]
+                    else:
+                        target = notDeepEnough[0]
+                #pick a target label from the ones that do (if there are none, from the ones that don't)
+                #assign all the ones that don't, to that label, using a replace function arr[arr > 255] = x
+                    for repl in notDeepEnough:
+                        labelImage[np.absolute(labelImage - repl) < 0.1] = target
+                #and assign that value, for nextpix itself. thanx
+                    for pixel in pixList:
+                        labelImage[pixel] = target
     
     for x in range(height):
         for y in range(width):
@@ -98,5 +131,5 @@ if __name__ == "__main__":
     newarr = np.zeros((2,2,3))
     newarr[1,1,:] = [150,150,150]
     newarr = newarr.astype('uint8')
-    img = Image.fromarray(naive_watershed(img).astype('uint8'))
+    img = Image.fromarray(naive_watershed(img,10).astype('uint8'))
     img.show()
