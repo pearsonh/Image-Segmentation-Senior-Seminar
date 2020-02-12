@@ -50,10 +50,9 @@ def regionSplitAndMerge(image, threshold):
     #adjGraph = quadNode([img.shape, [0,0]])
     #print(adjGraph.regions)
     #print(adjGraph)
-    splitMergeSeg = splitAndMerge(img, np.empty(img.shape), threshold)
-    splitSeg = split(img, np.empty(img.shape), threshold)
-    '''regionSegmentation = merge(img, splitSeg, adjGraph, threshold)'''
-    #splitMergeSegTwoColor = twoColor(splitMergeSeg)
+    splitMergeSeg = twoColor(splitAndMerge(img, np.empty(img.shape), threshold))
+    splitSeg = twoColor(split(img, np.empty(img.shape), threshold))
+
     return (splitMergeSeg, splitSeg)
 
 def splitAndMerge(img, blank, threshold):
@@ -71,6 +70,10 @@ def splitAndMerge(img, blank, threshold):
         bL = img[len(img)//2:, :len(img)//2]
         bR = img[len(img)//2:, len(img)//2:]
         print("Merging")
+        splitAndMerge(tL, blank[:len(blank)//2, :len(blank)//2], threshold)
+        splitAndMerge(tR, blank[:len(blank)//2, len(blank)//2:],  threshold)
+        splitAndMerge(bL, blank[len(blank)//2:, :len(blank)//2],  threshold)
+        splitAndMerge(bR, blank[len(blank)//2:, len(blank)//2:],  threshold)
         if flatTest(np.concatenate([tL, tR], axis=1), threshold):
             print("topMerge")
             blank[:len(blank)//2, :len(blank)//2] = np.full(tL.shape, np.mean(np.concatenate([tL, tR], axis=1)))
@@ -91,10 +94,6 @@ def splitAndMerge(img, blank, threshold):
             blank[:len(blank)//2, len(blank)//2:] = np.full(tR.shape, np.mean(np.concatenate([tR, bR], axis=0)))
             blank[len(blank)//2:, len(blank)//2:] = np.full(bR.shape, np.mean(np.concatenate([tR, bR], axis=0)))
             #blank[:len(blank), len(blank)//2:] = np.full(np.concatenate([tR, bR], axis=0).shape, np.mean(np.concatenate([tR, bR], axis=0)))
-        splitAndMerge(tL, blank[:len(blank)//2, :len(blank)//2], threshold)
-        splitAndMerge(tR, blank[:len(blank)//2, len(blank)//2:],  threshold)
-        splitAndMerge(bL, blank[len(blank)//2:, :len(blank)//2],  threshold)
-        splitAndMerge(bR, blank[len(blank)//2:, len(blank)//2:],  threshold)
         return blank
 
 def split(img, blank, threshold):
@@ -146,19 +145,16 @@ def twoColor(img):
     print(mean)
     for i in range(x):
         for j in range(y):
-            if img[i][j] < mean - mean//8:
+            if img[i][j] < mean:
                 img[i][j] = 0
-            elif img[i][j] > mean + mean//8:
-                img[i][j] = 255
             else:
-                print("Middle")
-                img[i][j] = mean
+                img[i][j] = 225
     return img
 
 
 if __name__ == '__main__':
     img = Image.open("22093.jpg")
-    array = regionSplitAndMerge(img, 400)
+    array = regionSplitAndMerge(img, 350)
     splitAndMerge = array[0]
     split = array[1]
     newImage = Image.fromarray(splitAndMerge)
