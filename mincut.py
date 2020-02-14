@@ -6,6 +6,7 @@ from scipy.sparse.linalg import *
 import time
 from eval import bde, region_based_eval
 from parser import import_berkeley#, import_weizmann_1
+from tqdm import tqdm
 
 # compute difference between two pixels in the np array of rgb tuples by euclidean
 # distance between rgb values (or replace with some other metric in this method)
@@ -15,7 +16,7 @@ def differenceMetric(coords1, coords2, pixels):
     featureDifference = (rgb1[0] - rgb2[0])**2 + (rgb1[1] - rgb2[1])**2 + (rgb1[2] - rgb2[2])**2
     spatialDistance = (coords1[0] - coords2[0])**2 + (coords1[1] - coords2[1])**2
     featureWeight = 1
-    spatialWeight = 1/100
+    spatialWeight = 1
     #difference = math.exp(-(featureWeight * featureDifference + spatialWeight* spatialDistance))
     difference = featureWeight * featureDifference + spatialWeight* spatialDistance
     return difference
@@ -31,24 +32,28 @@ def differenceMetricSimple(coords1, coords2, pixels):
 # uses scipy sparse linalg eigenvector solver for the Lanczos method
 # returns a tuple containing an array of eigenvalues and an array of eigenvectors
 def findEigens(D, W):
-    return eigsh(inv(D)*(D - W))
+    start = time.time()
+    eigs = eigsh(inv(D)*(D - W))
+    stop = time.time()
+    #print("finding eigenvalues took ", stop-start, " seconds")
+    return eigs
 
 # takes in an np array of pixels and returns a sparse adjacency matrix (csc_matrix) with edge weights for this image
 def pixelsToAdjMatrix(pixels):
-    r = 13
+    r = 12
     y,x,_ = pixels.shape #assuming tuples of 3 rgb values are the third coordinate of the shape
     N = x * y
     row = []
     col = []
     data = []
     #go through each pixel in the image and compare it to the r pixels on all sides of it
-    for i in range(x):
+    for i in tqdm(range(x)):
         for j in range(y):
             # compare (i,j) to each pixel in range r arround it
             for k in range(i-r,i+r): # x coordinate of offset pixel
                 for l in range(j-r,j+r): # y coordinate of offset pixel
                     if k >= 0 and l >= 0 and k < x and l < y: # make sure this pixel isn't out of bounds
-                        diff = differenceMetric((j,i), (l,k), pixels)
+                        diff = differenceMetricSimple((j,i), (l,k), pixels)
                         row.append(j*x + i) #add x coord to list of x coords
                         col.append(l*x + k) #add y coord to list of y coords
                         data.append(diff) #add the value that belongs at (j*x + i, l*x + k) in the adjacency matrix
@@ -84,17 +89,17 @@ def mincut(img):
     return newEigIndicator
 
 if __name__ == "__main__":
-    filename = "test3.jpg"
+    filename = "15088.jpg"
     img = Image.open(filename)
     print(filename)
     start=time.time()
     array = mincut(img)
     stop=time.time()
-    print("runtime is", stop-start)
+    print("total runtime is", stop-start)
     img = Image.fromarray(array*255, mode="L")
     img.show()
-    #img.save("test2-10-newweight-newsigs.jpg", "JPEG")
-    #groundTruth = import_berkeley("24063.seg")
-    '''groundTruth = import_weizmann_1("weizmann-duck-seg.jpg")
+    img.save("15088-12-fweight.jpg", "JPEG")
+    groundTruth = import_berkeley("15088.seg")
+    #groundTruth = import_weizmann_1("weizmann-duck-seg.jpg")
     print("region based is ", region_based_eval(groundTruth, array))
-    print("edge based is ", bde(groundTruth, array))'''
+    print("edge based is ", bde(groundTruth, array))
