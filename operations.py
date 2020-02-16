@@ -7,7 +7,7 @@ from collections import Counter
 from eval import bde
 import parser
 '''WARNING: THIS SCRIPT IS BUILT TO BE RUN ON TH CMC 307 LAB COMPUTER
-AND WILL NOT WORK ON OTHERS WITHOUT CHANGING THE DIRECTORIES'
+AND WILL NOT WORK ON OTHERS WITHOUT CHANGING THE DIRECTORIES'''
 def import_berkeley(filename):
     '''Given the path to a file containing a Berkeley encoding of a segmentation,
     returns the numpy version of that segmentation'''
