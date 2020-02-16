@@ -100,7 +100,7 @@ def import_berkeley(filename):
     linelist = None
     with open(filename) as segFile:
         linelist = [line for line in segFile]
-    i = 0;
+    i = 0
     width = None
     height = None
     start_line = None
