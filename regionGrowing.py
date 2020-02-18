@@ -238,7 +238,7 @@ def getSegments(seg):
                 pixel = 1
     return a
 
-def main():
+def runRG():
     img = Image.open("42049.jpg")
     int1 = random.randrange(0, 255)
     int2 = random.randrange(0, 255)
@@ -260,6 +260,21 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
-    
-   
+    # img = Image.open("42049.jpg")
+    # int1 = random.randrange(0, 255)
+    # int2 = random.randrange(0, 255)
+    # seed = [int1, int2]
+    # print("SEED")
+    # print(seed)
+    # newsize = (255,255)
+    # threshold = getThresh()
+    # img = img.resize(newsize)
+    # seg = region_growing(img, seed, threshold)
+    # seg = np.swapaxes(seg,0,1)
+    # seg = np.swapaxes(seg,1,0)
+    # # print(seg)
+    # new_im = Image.fromarray(seg)
+    # new_im.show()
+    # print(datetime.now()-start)
+    #
+    # output = getSegments(seg)
