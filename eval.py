@@ -6,6 +6,7 @@
 import numpy as np
 import networkx as nx
 import scipy.ndimage as sp
+import scipy.optimize as opt
 from thresholding import baseline_thresholding
 from parser import import_berkeley
 from PIL import Image
@@ -107,43 +108,27 @@ def region_based_eval(truth, generated):
         divided by the union of these regions. A larger Jaccard measure means
         a closer overlap in regions.'''
     height,length = truth.shape
-    G = nx.Graph()
-    true_nodes = []
-    alg_nodes = []
+
+    max_true=np.amax(truth)+1
+    max_alg=np.amax(generated)+1 #axis??
+    weights =  np.array([[height*length]*max_alg]*max_true)
+    true_sizes=np.zeros(max_true)
+    alg_sizes=np.zeros(max_alg)
     for i in range(height):
         for j in range(length):
-            true_seg=str(truth[i,j])+"t"
-            alg_seg=str(generated[i,j])+"a"
-            if G.has_edge(true_seg, alg_seg) == False:
-                G.add_edge(true_seg, alg_seg, weight=1)
-            else:
-                G[true_seg][alg_seg]['weight'] += 1
-            if 'size' not in G.nodes[true_seg]:
-                G.nodes[true_seg]['size']=1
-                G.nodes[true_seg]['bipartite']=0
-                true_nodes.append(true_seg)
-            else:
-                G.nodes[true_seg]['size']+=1
-            if 'size' not in G.nodes[alg_seg]:
-                G.nodes[alg_seg]['size']=1
-                G.nodes[true_seg]['bipartite']=1
-                alg_nodes.append(alg_seg)
-            else:
-                G.nodes[alg_seg]['size']+=1
+            weights[truth[i,j], generated[i,j]]-=1
+            true_sizes[truth[i,j]]+=1
+            alg_sizes[generated[i,j]]+=1
 
-    for node in true_nodes:
-        for node2 in alg_nodes:
-            if G.has_edge(node, node2) == False:
-                G.add_edge(node, node2, weight=0)
-
-    matching = nx.bipartite.maximum_matching(G)
+    true_ind, alg_ind=opt.linear_sum_assignment(weights)
     total=0
-    for node in alg_nodes:
-        match = matching[node]
-        intersect = G[match][node]['weight']
-        jaccard = intersect/(G.nodes[match]['size']+G.nodes[node]['size']-intersect)
+    for i in range(1, len(alg_ind)):
+        match = weights[true_ind[i], alg_ind[i]]
+        intersect = height*length-match
+        print(intersect)
+        jaccard = intersect/(alg_sizes[alg_ind[i]]+true_sizes[true_ind[i]]-intersect)
         total+=jaccard
-    return total/len(alg_nodes)
+    return total/(len(alg_sizes)-1)
 
 if __name__ == "__main__":
     ''' Test evaluation functions on simple segmentations'''
@@ -174,16 +159,16 @@ if __name__ == "__main__":
                   [5,5,5,3,3]])
     #
     # print(bde(true, generation))
-    # print(region_based_eval(true, generation))
+    print(region_based_eval(true, generation))
 
     # test on a real image
-    filename = "22093.jpg"
-    img = Image.open(filename)
-    print(filename)
-    generated = baseline_thresholding(img)
-    truth = import_berkeley("22093.seg")
-    start=time.time()
-    bde = bde(truth, generated)
-    stop=time.time()
-    print("time for bde is ", stop - start)
-    print("bde val is ", bde)
+    # filename = "22093.jpg"
+    # img = Image.open(filename)
+    # print(filename)
+    # generated = baseline_thresholding(img)
+    # truth = import_berkeley("22093.seg")
+    # start=time.time()
+    # bde = bde(truth, generated)
+    # stop=time.time()
+    # print("time for bde is ", stop - start)
+    # print("bde val is ", bde)
