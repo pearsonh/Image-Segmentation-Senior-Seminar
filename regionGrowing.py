@@ -238,7 +238,7 @@ def getSegments(seg):
                 pixel = 1
     return a
 
-if __name__ == '__main__':
+def main():
     img = Image.open("42049.jpg")
     int1 = random.randrange(0, 255)
     int2 = random.randrange(0, 255)
@@ -257,3 +257,9 @@ if __name__ == '__main__':
     print(datetime.now()-start)
 
     output = getSegments(seg)
+
+
+if __name__ == '__main__':
+    main()
+    
+   
