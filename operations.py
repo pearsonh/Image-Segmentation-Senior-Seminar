@@ -27,7 +27,7 @@ def evaluate_all_images(dataset, metric):
         csv_line_list = ["Segmentation file name, Ground truth file name, BDE value"]
     if metric == JACCARD:
         csv_line_list = ["Segmentation file name, Ground truth file name, Jaccard value"]
-    
+
     if dataset == BERKELEY:
         location_segments = "thresholding_segmentations_test" # *** change to your file path **
         location_truths = "berkeley_ground_truths" # *** change to your file path ***
@@ -67,7 +67,7 @@ def evaluate_all_images(dataset, metric):
                 seg = (np.array(seg) > 0).astype(int) # *** may need to change this line if you have more than two segments ***
                 current_truths = []
                 for truth in all_truths:
-                    if segmentation_name[:-4] + "_" in truth:
+                    if segmentation_name[:-4] in truth:
                         current_truths.append(truth)
                 print("Ground truths for this image: ", current_truths)
                 for truth_string in current_truths:
@@ -84,7 +84,7 @@ def evaluate_all_images(dataset, metric):
                     csv_line_list.append(csv_line)
 
     #ideally output filename should list segmentation algorithm, eval metric, and dataset name so we can keep track of which is which
-    with open('thresholding-berkeley-jaccard.csv','w') as file: # *** change to your desired output filename ***
+    with open('thresholding-weizmann-bde.csv','w') as file: # *** change to your desired output filename ***
         for line in csv_line_list:
             file.write(line)
             file.write('\n')
@@ -104,4 +104,4 @@ def segment_all_images():
 
 if __name__ == "__main__":
     #segment_all_images()
-    evaluate_all_images(BERKELEY, BDE)
+    evaluate_all_images(WEIZMANN, BDE)
