@@ -38,7 +38,7 @@ def evaluate_all_images(dataset, metric):
                 seg = Image.open(location_segments + "/" + segmentation_name)
                 print("IMAGE OPENED: " + segmentation_name)
                 # convert segmentation image into array of 0s and 1s (pixel values seem to have gotten distorted on google drive)
-                seg = (np.array(seg) > 0).astype(int) # *** may need to change this line if you have more than two segments ***
+                seg = np.array(seg)
                 truth_string = segmentation_name[:-4] + ".seg"
                 truth = import_berkeley(location_truths + "/" + truth_string)
                 print("TRUTH IMPORTED: " + truth_string)
@@ -64,7 +64,7 @@ def evaluate_all_images(dataset, metric):
                 seg = Image.open(location_segments + "/" + segmentation_name)
                 print("IMAGE OPENED: " + segmentation_name)
                 # convert segmentation image into array of 0s and 1s (pixel values seem to have gotten distorted on google drive)
-                seg = (np.array(seg) > 0).astype(int) # *** may need to change this line if you have more than two segments ***
+                seg = np.array(seg)
                 current_truths = []
                 for truth in all_truths:
                     if segmentation_name[:-4] in truth:
