@@ -125,7 +125,8 @@ def region_based_eval(truth, generated):
         divided by the union of these regions. A larger Jaccard measure means
         a closer overlap in regions.'''
     height,length = truth.shape
-
+    generated=generated.astype(int)
+    truth=truth.astype(int)
     max_true=np.amax(truth)+1
     max_alg=np.amax(generated)+1 #axis??
     weights =  np.array([[height*length]*max_alg]*max_true)
