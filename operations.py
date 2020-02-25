@@ -3,6 +3,7 @@ from PIL import Image
 import numpy as np
 import os
 from collections import Counter
+import kmeans
 
 from eval import bde
 import parser
@@ -59,13 +60,21 @@ def segment_all_images():
     print(os.path.expanduser(location))
     print("FOUND IT")
     files = os.listdir("BSDS300/images")
-    
+
+    # for file in files:
+    #     img = Image.open(location + '/' + file)
+    #     #temp = bt(img)
+    #     temp=kmeans.kmeans(img)
+    #     img = Image.fromarray(temp * 30)
+    #     img = img.convert("L")
+    #     img.save("kmeans_segmentations/" + file)
     for file in files:
         img = Image.open(location + '/' + file)
-        temp = bt(img)
-        img = Image.fromarray(temp * 100)
+        #temp = bt(img)
+        temp=kmeans.expectation_maximization(img)
+        img = Image.fromarray(temp * 30)
         img = img.convert("L")
-        img.save("thresholding_segmentations/" + file)
+        img.save("em_segmentations/" + file)
 
 if __name__ == "__main__":
     segment_all_images()

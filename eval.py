@@ -122,13 +122,16 @@ def region_based_eval(truth, generated):
 
     true_ind, alg_ind=opt.linear_sum_assignment(weights)
     total=0
-    for i in range(1, len(alg_ind)):
-        match = weights[true_ind[i], alg_ind[i]]
-        intersect = height*length-match
-        print(intersect)
-        jaccard = intersect/(alg_sizes[alg_ind[i]]+true_sizes[true_ind[i]]-intersect)
-        total+=jaccard
-    return total/(len(alg_sizes)-1)
+    count=0
+    for i in range(len(alg_ind)):
+        if alg_sizes[i]!=0:
+            count+=1
+            match = weights[true_ind[i], alg_ind[i]]
+            intersect = height*length-match
+            #print(intersect)
+            jaccard = intersect/(alg_sizes[alg_ind[i]]+true_sizes[true_ind[i]]-intersect)
+            total+=jaccard
+    return total/count
 
 if __name__ == "__main__":
     ''' Test evaluation functions on simple segmentations'''
@@ -147,9 +150,9 @@ if __name__ == "__main__":
     # print(region_based_eval(testarray1, testarray2))
 
     # Test bipartite matching
-    true = np.asarray([[1,1,1,2,2],
-            [1,2,2,2,3],
-            [1,2,4,4,3],
+    true = np.asarray([[100,100,100,2,2],
+            [100,2,2,2,3],
+            [100,2,4,4,3],
             [5,5,4,3,3],
             [5,5,5,5,3]])
     generation = np.asarray([[2,2,1,1,1],
