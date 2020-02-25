@@ -125,6 +125,9 @@ def region_based_eval(truth, generated):
         divided by the union of these regions. A larger Jaccard measure means
         a closer overlap in regions.'''
     height,length = truth.shape
+    height2,length2 = generated.shape
+    height=max(height, height2)
+    length=max(length, length2)
     generated=generated.astype(int)
     truth=truth.astype(int)
     max_true=np.amax(truth)+1
@@ -139,16 +142,27 @@ def region_based_eval(truth, generated):
             alg_sizes[generated[i,j]]+=1
 
     true_ind, alg_ind=opt.linear_sum_assignment(weights)
+    #print(max_true)
+    #print(max_alg)
+    #print(weights)
+    #print(true_ind)
+    #print(alg_ind)
+    #print(alg_sizes)
     total=0
     count=0
     for i in range(len(alg_ind)):
-        if alg_sizes[i]!=0:
+        if alg_sizes[alg_ind[i]]!=0:
             count+=1
             match = weights[true_ind[i], alg_ind[i]]
             intersect = height*length-match
             #print(intersect)
+            #print(intersect)
             jaccard = intersect/(alg_sizes[alg_ind[i]]+true_sizes[true_ind[i]]-intersect)
             total+=jaccard
+        #else:
+            #print("flase:", weights[true_ind[i], alg_ind[i]])
+    #print(count)
+    #print(weights.shape)
     return total/count
 
 if __name__ == "__main__":
@@ -183,6 +197,9 @@ if __name__ == "__main__":
     # print(region_based_eval(true, generation))
 
     # test on a real image
+    #true=import_berkeley("berkeley_ground_truths/20008.seg")
+    #generated=np.array(Image.open("20008.jpg")).astype("int")
+    #print(region_based_eval(true,generated))
     filename = "b2chopper008.png"
     img = Image.open(filename)
     print(filename)
