@@ -8,7 +8,7 @@ import networkx as nx
 import scipy.ndimage as sp
 import scipy.optimize as opt
 from thresholding import baseline_thresholding
-from parser import import_berkeley
+from parser import import_berkeley, import_weizmann
 from PIL import Image
 import time
 import sys
@@ -26,7 +26,8 @@ def processSegmentationWithKernels(segmentation):
         edge pixel.
 
         A pixel is considered 'on an edge' if at least one pixel
-        on the four sides of it lies in a different segment.
+        on the four sides of it lies in a different segment (or if it is on the
+        actual edge of the image).
 
         For example, suppose segmentation is the following:
         0 0 0 1 1 1
@@ -35,16 +36,10 @@ def processSegmentationWithKernels(segmentation):
         0 0 0 1 1 1
 
         Then edge pixels are marked by X's below:
-        0 0 X X 1 1
-        0 0 X X 1 1
-        0 0 X X 1 1
-        0 0 X X 1 1
-
-        Since outer edges of the image will always correspond to segment edges, we do
-        not count these as edge pixels (unless a region is one pixel wide along an edge,
-        in which case these edge pixels correspond to the inner edge of that segment),
-        as they would always be matched to themselves when calculating BDE, giving a
-        distance of 0 (thus not contributing anything to the metric).
+        X X X X X X
+        X 0 X X 1 X
+        X 0 X X 1 X
+        X X X X X X
 
         Returns a list of all the non-zero elements in this sum array (i.e. all the
         edge pixel coordinates).'''
@@ -57,7 +52,30 @@ def processSegmentationWithKernels(segmentation):
     convolvedLeft = abs(sp.convolve(segmentation, kernelLeft))
     convolvedRight = abs(sp.convolve(segmentation, kernelRight))
     sumArr = convolvedTop + convolvedBottom + convolvedLeft + convolvedRight
-    coords = np.transpose(np.nonzero(sumArr))
+    nz = np.nonzero(sumArr)
+
+    #add the coordinates of outer edge pixels of the image
+    height,length = segmentation.shape
+    top_range = np.expand_dims(np.arange(length),axis=0)
+    top_zeros = np.expand_dims(np.zeros(length),axis=0)
+    top_edges = np.concatenate((top_zeros,top_range), axis=0)
+
+    bottom_range = np.expand_dims(np.arange(length),axis=0)
+    bottom_fill = np.expand_dims(np.full(length, height - 1),axis=0)
+    bottom_edges = np.concatenate((bottom_fill,bottom_range), axis=0)
+
+    left_range = np.expand_dims(np.arange(1,height - 1),axis=0)
+    left_zeros = np.expand_dims(np.zeros(height - 2),axis=0)
+    left_edges = np.concatenate((left_range,left_zeros), axis=0)
+
+    right_range = np.expand_dims(np.arange(1,height -1),axis=0)
+    right_fill = np.expand_dims(np.full(height - 2, length - 1),axis=0)
+    right_edges = np.concatenate((right_range,right_fill), axis=0)
+
+    nz = np.concatenate((top_edges, bottom_edges, nz, left_edges, right_edges), axis=1)
+
+    # make sure there are no duplicate edges in the list
+    coords = np.unique(np.transpose(nz), axis=0)
     return coords
 
 def bde(segmentation,groundtruth):
@@ -75,7 +93,6 @@ def bde(segmentation,groundtruth):
     # locate edge pixels in each segmentation and store these as lists of coordinates
     segEdges = processSegmentationWithKernels(segmentation)
     truEdges = processSegmentationWithKernels(groundtruth)
-    totalDistance = 0
     numSegEdges, _ = segEdges.shape
     numTruEdges, _ = truEdges.shape
     # create matrices of tuples whose rows/cols are copies of segEdges and truEdges
@@ -88,12 +105,12 @@ def bde(segmentation,groundtruth):
     B = np.transpose(np.reshape(B, (numTruEdges, numSegEdges, 2)), (1,0,2))
     # C is a matrix of euclidean distances between every pair of true and segEdges
     C = np.sqrt(np.sum(np.square(A - B), axis=2))
-    # add the min value for each row and each column of C to the total distance.
+    # find the min value for each row and each column of C.
     # this is equivalent to finding the min distance from each true edge to a seg
     # edge, and the min distance from each seg edge to a true edge
-    totalDistance += np.sum(np.amin(C, axis=0))
-    totalDistance += np.sum(np.amin(C, axis=1))
-    return totalDistance / (length*height*2)
+    minsTruToSeg = np.sum(np.amin(C, axis=0))
+    minsSegToTru = np.sum(np.amin(C, axis=1))
+    return (minsTruToSeg / len(truEdges) + minsSegToTru / len(segEdges)) / 2
 
 def region_based_eval(truth, generated):
     ''' Calculates a Jaccard score for the similarity of the generated segmentation to the
@@ -136,18 +153,18 @@ def region_based_eval(truth, generated):
 if __name__ == "__main__":
     ''' Test evaluation functions on simple segmentations'''
     # Test BDE
-    testarray1 = np.asarray([[1,1,1,1,1,0,0,0],
-                  [1,1,1,1,0,0,0,0],
-                  [1,1,1,0,0,0,0,0],
-                  [1,1,0,0,0,0,0,0]])
-
-    testarray2 = np.asarray([[0,0,0,1,1,1,1,1],
-                  [0,0,0,0,1,1,1,1],
-                  [0,0,0,0,0,1,1,1],
-                  [0,0,0,0,0,0,1,1]])
-
+    # testarray1 = np.asarray([[1,1,1,1,1,0,0,0],
+    #               [1,1,1,1,1,0,0,0],
+    #               [1,1,1,0,0,0,0,0],
+    #               [1,1,0,0,0,0,0,0]])
+    #
+    # testarray2 = np.asarray([[0,0,0,1,1,1,1,1],
+    #               [0,0,0,0,1,1,1,1],
+    #               [0,0,0,0,0,1,1,1],
+    #               [0,0,0,0,0,0,1,1]])
+    #
     # print(bde(testarray1, testarray2))
-    # print(region_based_eval(testarray1, testarray2))
+    #print(region_based_eval(testarray1, testarray2))
 
     # Test bipartite matching
     true = np.asarray([[100,100,100,2,2],
@@ -162,16 +179,18 @@ if __name__ == "__main__":
                   [5,5,5,3,3]])
     #
     # print(bde(true, generation))
-    print(region_based_eval(true, generation))
+    # print(region_based_eval(true, generation))
 
     # test on a real image
-    # filename = "22093.jpg"
-    # img = Image.open(filename)
-    # print(filename)
-    # generated = baseline_thresholding(img)
-    # truth = import_berkeley("22093.seg")
-    # start=time.time()
-    # bde = bde(truth, generated)
-    # stop=time.time()
-    # print("time for bde is ", stop - start)
-    # print("bde val is ", bde)
+    filename = "b2chopper008.png"
+    img = Image.open(filename)
+    print(filename)
+    generated = baseline_thresholding(img).astype('uint8')
+    image = Image.fromarray(generated*255, mode="L")
+    image.show()
+    truth = import_weizmann("b2chopper008_4.png")
+    start=time.time()
+    bde = bde(truth, generated)
+    stop=time.time()
+    print("time for bde is ", stop - start)
+    print("bde val is ", bde)

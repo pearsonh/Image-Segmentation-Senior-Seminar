@@ -3,78 +3,107 @@ from PIL import Image
 import numpy as np
 import os
 from collections import Counter
+from parser import import_berkeley, import_weizmann
+from eval import bde, region_based_eval
 import kmeans
 
-from eval import bde
-import parser
 '''WARNING: THIS SCRIPT IS BUILT TO BE RUN ON TH CMC 307 LAB COMPUTER
 AND WILL NOT WORK ON OTHERS WITHOUT CHANGING THE DIRECTORIES'''
-def import_berkeley(filename):
-    '''Given the path to a file containing a Berkeley encoding of a segmentation,
-    returns the numpy version of that segmentation'''
-    linelist = None
-    with open(filename) as segFile:
-        linelist = [line for line in segFile]
-    i = 0
-    width = None
-    height = None
-    start_line = None
-    while not (width and height and start_line):
-        if linelist[i].startswith("width"):
-            width = int(linelist[i].split(" ")[1])
-        if linelist[i].startswith("height"):
-            height = int(linelist[i].split(" ")[1])
-        if linelist[i].startswith("data"):
-            start_line = i+1
-        i += 1
-    segarray = -np.ones((height,width))
-    for line in range(start_line,len(linelist)):
-        seg, row, start, end = linelist[line].split(" ")
-        for i in range(int(start),int(end)+1):
-            segarray[int(row),i] = int(seg)
-    return segarray
 
+WEIZMANN = 0
+BERKELEY = 1
+BDE = 2
+JACCARD = 3
 
-def experiment():
-    location_segments = "C:\\Users\\brydu\\OneDrive\\Desktop\\Comps\\Image-Segmentation-Senior-Seminar\\threshold_segments\\"
-    location_truths = "C:\\Users\\brydu\\OneDrive\\Desktop\\Comps\\Image-Segmentation-Senior-Seminar\\threshold_segments_truths\\"
+'''To run the two evaluation metrics on your algorithm's segmentations for a given dataset,
+indicate which dataset you are running on when calling this function (WEIZMANN or BERKELEY),
+and indicate which evaluation metric you are running (BDE or JACCARD),
+then change the file paths and filenames in the marked spots in the code below.'''
+def evaluate_all_images(dataset, metric):
+    # run an evaluation metric on an algorithm's segmentation outputs for a particular dataset
+    # (for example, run bde on baseline thresholding's outputs for weizmann 1 object dataset)
+    # add each result as a line in a csv file of the following format described in the first line in the list
+    csv_line_list = []
+    if metric == BDE:
+        csv_line_list = ["Segmentation file name, Ground truth file name, BDE value"]
+    if metric == JACCARD:
+        csv_line_list = ["Segmentation file name, Ground truth file name, Jaccard value"]
 
-    bde_accuracy_averages = {}
-    files = os.listdir(location_truths)
-    for file in files:
-        print("EXECUTING " + file)
-        segmentation = "segmentation" + file[:-4] + ".jpg"
-        seg = Image.open(location_segments + segmentation)
-        print("IMAGE OPENED")
-        seg = np.array(seg)
-        truth = import_berkeley(location_truths + file)
-        print("TRUTH IMPORTED")
-        accuracy = bde(seg, truth)
-        print(accuracy)
-        print("ACCURACY DISCOVERED")
-        bde_accuracy_averages[file] = accuracy
-    print(bde_accuracy_averages)
+    if dataset == BERKELEY:
+        location_segments = "thresholding_segmentations_test" # *** change to your file path **
+        location_truths = "berkeley_ground_truths" # *** change to your file path ***
+
+        files = os.listdir(location_segments)
+        for segmentation_name in files:
+            if not segmentation_name.startswith('.'):
+                seg = Image.open(location_segments + "/" + segmentation_name)
+                print("IMAGE OPENED: " + segmentation_name)
+                # convert segmentation image into array of 0s and 1s (pixel values seem to have gotten distorted on google drive)
+                seg = np.array(seg)
+                truth_string = segmentation_name[:-4] + ".seg"
+                truth = import_berkeley(location_truths + "/" + truth_string)
+                print("TRUTH IMPORTED: " + truth_string)
+                if metric == BDE:
+                    bde_score = bde(seg, truth)
+                    print("bde is:", bde_score)
+                    csv_line = segmentation_name + ", " + truth_string + ", " + str(bde_score)
+                if metric == JACCARD:
+                    jaccard_score = region_based_eval(truth, seg)
+                    print("jaccard score is:", jaccard_score)
+                    csv_line = segmentation_name + ", " + truth_string + ", " + str(jaccard_score)
+                csv_line_list.append(csv_line)
+
+    if dataset == WEIZMANN:
+        location_segments = "thresholding_segmentations_2obj_test" # *** change to your file path ***
+        location_truths = "Weizmann2Obj/GroundTruths" # *** change to your file path ***
+
+        files = os.listdir(location_segments)
+        all_truths = os.listdir(location_truths)
+
+        for segmentation_name in files:
+            if not segmentation_name.startswith('.'):
+                seg = Image.open(location_segments + "/" + segmentation_name)
+                print("IMAGE OPENED: " + segmentation_name)
+                # convert segmentation image into array of 0s and 1s (pixel values seem to have gotten distorted on google drive)
+                seg = np.array(seg)
+                current_truths = []
+                for truth in all_truths:
+                    if segmentation_name[:-4] in truth:
+                        current_truths.append(truth)
+                print("Ground truths for this image: ", current_truths)
+                for truth_string in current_truths:
+                    truth = import_weizmann(location_truths + "/" + truth_string)
+                    print("TRUTH IMPORTED: ", truth_string)
+                    if metric == BDE:
+                        bde_score = bde(seg, truth)
+                        print("bde is: ", bde_score)
+                        csv_line = segmentation_name + ", " + truth_string + ", " + str(bde_score)
+                    if metric == JACCARD:
+                        jaccard_score = region_based_eval(truth, seg)
+                        print("jaccard score is:", jaccard_score)
+                        csv_line = segmentation_name + ", " + truth_string + ", " + str(jaccard_score)
+                    csv_line_list.append(csv_line)
+
+    #ideally output filename should list segmentation algorithm, eval metric, and dataset name so we can keep track of which is which
+    with open('thresholding-weizmann-bde.csv','w') as file: # *** change to your desired output filename ***
+        for line in csv_line_list:
+            file.write(line)
+            file.write('\n')
 
 def segment_all_images():
-    location = "BSDS300/images"
+    location = "Weizmann2Obj/SourceImages"
     print(os.path.expanduser(location))
     print("FOUND IT")
-    files = os.listdir("BSDS300/images")
+    files = os.listdir(location)
 
-    # for file in files:
-    #     img = Image.open(location + '/' + file)
-    #     #temp = bt(img)
-    #     temp=kmeans.kmeans(img)
-    #     img = Image.fromarray(temp * 30)
-    #     img = img.convert("L")
-    #     img.save("kmeans_segmentations/" + file)
     for file in files:
         img = Image.open(location + '/' + file)
         #temp = bt(img)
         temp=kmeans.expectation_maximization(img)
         img = Image.fromarray(temp * 30)
         img = img.convert("L")
-        img.save("em_segmentations/" + file)
+        img.save("thresholding_segmentations_2obj_test/" + file)
 
 if __name__ == "__main__":
-    segment_all_images()
+    #segment_all_images()
+    evaluate_all_images(WEIZMANN, BDE)
