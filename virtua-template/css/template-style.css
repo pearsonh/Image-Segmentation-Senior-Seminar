@@ -9,11 +9,11 @@ p {
   font-size: 0.85rem;
   line-height: 1.6rem;
 }
-a, a:link, a:visited, a:hover, a:active { 
+a, a:link, a:visited, a:hover, a:active {
 color: #777;
 }
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-  color: #000;                                         
+  color: #000;
   margin-bottom: 15px;
   margin-top: 0;
 }
@@ -24,12 +24,12 @@ h4, .h4 {font-size: 1.1rem;}
 h5, .h5 {font-size: 1rem;}
 h6, .h6 {font-size: 0.9rem;}
 h1.headline, .h1.headline {
-  font-size: 3.8rem; 
+  font-size: 3.8rem;
   letter-spacing: -2.5px;
 }
 h2.headline, .h2.headline {
-  font-size: 3rem; 
-  letter-spacing: -2px; 
+  font-size: 3rem;
+  letter-spacing: -2px;
 }
 h3.headline, .h3.headline {
   font-size: 2.6rem;
@@ -37,11 +37,11 @@ h3.headline, .h3.headline {
 }
 h4.headline, .h4.headline {
   font-size: 2.4rem;
-  letter-spacing: -1.5px; 
+  letter-spacing: -1.5px;
 }
 h5.headline, .h5.headline {
   font-size: 2.2rem;
-  letter-spacing: -1.4px; 
+  letter-spacing: -1.4px;
 }
 h6.headline, .h6.headline {
   font-size: 2rem;
@@ -65,7 +65,7 @@ h6.headline, .h6.headline {
 .text-size-70, .text-xxl-size-70 {font-size: 70px !important;}
 .text-size-80, .text-xxl-size-80 {font-size: 80px !important;}
 .text-size-90, .text-xxl-size-90 {font-size: 90px !important;}
-.text-size-100, .text-xxl-size-100 {font-size: 100px !important;}                                                                                                                
+.text-size-100, .text-xxl-size-100 {font-size: 100px !important;}
 .background-green .section-title:after, .primary-color-green .background-primary .section-title:after {color: #fff;}
 .text-thin {font-weight: 300;}
 b, strong, .text-strong {font-weight: 700;}
@@ -156,23 +156,23 @@ td {border-right:1px solid #fff;}
   background-repeat: no-repeat;
   background-size: cover;
 }
-.background-white-hightlight .top-nav .active-item > a, .background-white-hightlight .top-nav li a:hover, .background-white-hightlight .aside-nav li a:hover, 
+.background-white-hightlight .top-nav .active-item > a, .background-white-hightlight .top-nav li a:hover, .background-white-hightlight .aside-nav li a:hover,
 .background-white-hightlight .aside-nav > ul > li.active-item > a:link, .background-white-hightlight .aside-nav > ul > li.active-item > a:visited,
-.primary-color-white .background-primary-hightlight .top-nav .active-item > a, .primary-color-white .background-primary-hightlight .top-nav li a:hover, .primary-color-white .background-primary-hightlight .aside-nav li a:hover, 
+.primary-color-white .background-primary-hightlight .top-nav .active-item > a, .primary-color-white .background-primary-hightlight .top-nav li a:hover, .primary-color-white .background-primary-hightlight .aside-nav li a:hover,
 .primary-color-white .background-primary-hightlight .aside-nav > ul > li.active-item > a:link, .primary-color-white .background-primary-hightlight .aside-nav > ul > li.active-item > a:visited {
   background: #fff none repeat scroll 0 0;
   color: #454545;
 }
-.background-primary-hightlight .top-nav .active-item > a, .background-primary-hightlight .top-nav li a:hover, .background-primary-hightlight .aside-nav li a:hover, 
+.background-primary-hightlight .top-nav .active-item > a, .background-primary-hightlight .top-nav li a:hover, .background-primary-hightlight .aside-nav li a:hover,
 .background-primary-hightlight .aside-nav > ul > li.active-item > a:link, .background-primary-hightlight .aside-nav > ul > li.active-item > a:visited,
-.primary-color-primary .background-primary-hightlight .top-nav .active-item > a, .primary-color-primary .background-primary-hightlight .top-nav li a:hover, .primary-color-primary .background-primary-hightlight .aside-nav li a:hover, 
+.primary-color-primary .background-primary-hightlight .top-nav .active-item > a, .primary-color-primary .background-primary-hightlight .top-nav li a:hover, .primary-color-primary .background-primary-hightlight .aside-nav li a:hover,
 .primary-color-primary .background-primary-hightlight .aside-nav > ul > li.active-item > a:link, .primary-color-primary .background-primary-hightlight .aside-nav > ul > li.active-item > a:visited {
   background: #28a5df none repeat scroll 0 0;
   color: #fff;
-} 
-.background-dark-hightlight .top-nav .active-item > a, .background-dark-hightlight .top-nav li a:hover, .background-dark-hightlight .aside-nav li a:hover, 
+}
+.background-dark-hightlight .top-nav .active-item > a, .background-dark-hightlight .top-nav li a:hover, .background-dark-hightlight .aside-nav li a:hover,
 .background-dark-hightlight .aside-nav > ul > li.active-item > a:link, .background-dark-hightlight .aside-nav > ul > li.active-item > a:visited,
-.primary-color-dark .background-primary-hightlight .top-nav .active-item > a, .primary-color-dark .background-primary-hightlight .top-nav li a:hover, .primary-color-dark .background-primary-hightlight .aside-nav li a:hover, 
+.primary-color-dark .background-primary-hightlight .top-nav .active-item > a, .primary-color-dark .background-primary-hightlight .top-nav li a:hover, .primary-color-dark .background-primary-hightlight .aside-nav li a:hover,
 .primary-color-dark .background-primary-hightlight .aside-nav > ul > li.active-item > a:link, .primary-color-dark .background-primary-hightlight .aside-nav > ul > li.active-item > a:visited {
   background: #454545 none repeat scroll 0 0;
   color: #fff;
@@ -185,7 +185,7 @@ td {border-right:1px solid #fff;}
 /* Breaks */
 hr.break {
   border: 0;
-  border-top: 1px solid #e5e5e5; 
+  border-top: 1px solid #e5e5e5;
   display: block;
   margin: 40px 0;
 }
@@ -234,7 +234,7 @@ hr.break-small.break-center {
 
 video {
   display: block;
-} 
+}
 
 /* Top Nav */
 .top-nav li a, .background-white .top-nav li a {
@@ -248,7 +248,7 @@ nav {
   padding: 1.7rem 0;
   position: relative;
   z-index: 2;
-}  
+}
 .top-nav ul ul {
   background: #454545 none repeat scroll 0 0;
 }
@@ -342,7 +342,7 @@ aside.aside-left {
 .aside-nav.background-white-hightlight > ul > li > a:hover, .aside-nav.background-white-hightlight > ul > li.active-item > a:link, .aside-nav.background-white-hightlight > ul > li.active-item > a:visited,
 .primary-color-white .aside-nav.background-primary-hightlight > ul > li > a:hover, .primary-color-white .aside-nav.background-primary-hightlight > ul > li.active-item > a:link, .primary-color-white .aside-nav.background-primary-hightlight > ul > li.active-item > a:visited {
   border-color: #fff;
-} 
+}
 .aside-nav.background-primary-hightlight > ul > li > a:hover, .aside-nav.background-primary-hightlight > ul > li.active-item > a:link, .aside-nav.background-primary-hightlight > ul > li.active-item > a:visited,
 .primary-color-primary .aside-nav.background-primary-hightlight > ul > li > a:hover, .primary-color-primary .aside-nav.background-primary-hightlight > ul > li.active-item > a:link, .primary-color-primary .aside-nav.background-primary-hightlight > ul > li.active-item > a:visited {
   border-color: #28a5df;
@@ -355,24 +355,24 @@ aside.aside-left {
 /* Font colors */
 .background-white, .background-white p, a.background-white, .background-white a, .background-white a:link, .background-white a:visited, .background-white a:hover, .background-white a:active {
   color: #777;
-} 
+}
 .background-dark, .background-dark p, a.background-dark, a.background-dark:visited, a.background-dark:link, .background-dark a, .background-dark a:link, .background-dark a:visited, .background-dark a:hover, .background-dark a:active,
 .primary-color-dark .background-primary, .primary-color-dark .background-primary p, .primary-color-dark a.background-primary, .primary-color-dark a.background-primary:visited, .primary-color-dark a.background-primary:link, .primary-color-dark a.background-primary:visited, .primary-color-dark .background-primary a, .primary-color-dark .background-primary a:link, .primary-color-dark .background-primary a:visited, .primary-color-dark .background-primary a:hover, .primary-color-dark .background-primary a:active {
   color: #999;
 }
 .background-white h1, .background-white h2, .background-white h3, .background-white h4, .background-white h5, .background-white h6,
-.background-white .h1, .background-white .h2, .background-white .h3, .background-white .h4, .background-white .h5, .background-white .h6, 
+.background-white .h1, .background-white .h2, .background-white .h3, .background-white .h4, .background-white .h5, .background-white .h6,
 .primary-color-white .background-primary h1, .primary-color-white .background-primary h2, .primary-color-white .background-primary h3, .primary-color-white .background-primary h4, .primary-color-white .background-primary h5, .primary-color-white .background-primary h6,
 .primary-color-white .background-primary .h1, .primary-color-white .background-primary .h2, .primary-color-white .background-primary .h3, .primary-color-white .background-primary .h4, .primary-color-white .background-primary .h5, .primary-color-white .background-primary .h6 {
   color: #454545;
-} 
+}
 .image-hover-overlay-content *,
-.background-primary, .background-primary p, a.background-primary, a.background-primary:visited, a.background-primary:link, .background-primary a, .background-primary a:link, .background-primary a:visited, .background-primary a:hover, .background-primary a:active, 
+.background-primary, .background-primary p, a.background-primary, a.background-primary:visited, a.background-primary:link, .background-primary a, .background-primary a:link, .background-primary a:visited, .background-primary a:hover, .background-primary a:active,
 .primary-color-primary .background-primary, .primary-color-primary .background-primary p, .primary-color-primary a.background-primary, .primary-color-primary a.background-primary:visited, .primary-color-primary a.background-primary:link, .primary-color-primary .background-primary a, .primary-color-primary .background-primary a:link, .primary-color-primary .background-primary a:visited, .primary-color-primary .background-primary a:hover, .primary-color-primary .background-primary a:active {
   color: rgba(255,255,255, 0.75);
 }
 .background-dark h1, .background-dark h2, .background-dark h3, .background-dark h4, .background-dark h5, .background-dark h6,
-.background-dark .h1, .background-dark .h2, .background-dark .h3, .background-dark .h4, .background-dark .h5, .background-dark .h6, 
+.background-dark .h1, .background-dark .h2, .background-dark .h3, .background-dark .h4, .background-dark .h5, .background-dark .h6,
 .primary-color-dark .background-primary h1, .primary-color-dark .background-primary h2, .primary-color-dark .background-primary h3, .primary-color-dark .background-primary h4, .primary-color-dark .background-primary h5, .primary-color-dark .background-primary h6,
 .primary-color-dark .background-primary .h1, .primary-color-dark .background-primary .h2, .primary-color-dark .background-primary .h3, .primary-color-dark .background-primary .h4, .primary-color-dark .background-primary .h5, .primary-color-dark .background-primary .h6,
 .background-primary h1, .background-primary h2, .background-primary h3, .background-primary h4, .background-primary h5, .background-primary h6,
@@ -389,7 +389,7 @@ aside.aside-left {
 }
 .text-dark, .text-dark *, .primary-color-dark .text-primary, .primary-color-dark .text-primary * {
   color: #454545 !important;
-} 
+}
 .text-primary-hover, .text-white-hover, .text-primary, .text-dark-hover {
   transition: color 0.20s linear 0s;
   -o-transition: color 0.20s linear 0s;
@@ -405,17 +405,17 @@ aside.aside-left {
 }
 .text-dark-hover:hover, .primary-color-dark .text-primary-hover:hover {
   color: #454545 !important;
-} 
+}
 
 /* Background Colors */
 .background-white, .primary-color-white .background-primary {
   background-color: #fff !important;
 }
 .background-primary, .primary-color-primary .background-primary {
-  background-color: #28a5df !important; 
+  background-color: #28a5df !important;
 }
 .background-dark, .primary-color-dark .background-primary {
-  background-color: #454545 !important; 
+  background-color: #454545 !important;
 }
 .background-grey {
   background-color: #f5f5f5 !important;
@@ -462,7 +462,7 @@ aside.aside-left {
 .button:hover, a.button:hover, a.button:link:hover, a.button:visited:hover {
   box-shadow: 0 0 100px 100px rgba(255, 255, 255, 0.25) inset;
 }
-/* Stroke Buttons */ 
+/* Stroke Buttons */
 .button.button-white-stroke, a.button.button-white-stroke, a.button.button-white-stroke:link, a.button.button-white-stroke:visited,
 .primary-color-white .button.button-primary-stroke, .primary-color-white a.button.button-primary-stroke, .primary-color-white a.button.button-primary-stroke:link, .primary-color-white a.button.button-primary-stroke:visited {
   background: none;
@@ -501,16 +501,16 @@ aside.aside-left {
 }
 
 /* Containers */
-.section  { 
+.section  {
   padding: 6rem 1.25rem;
 }
-.section-small-padding  { 
+.section-small-padding  {
   padding: 2.5rem 1.25rem;
 }
-.section-top-padding  { 
+.section-top-padding  {
   padding: 6rem 1.25rem 0  1.25rem;
 }
-.section-top-small-padding  { 
+.section-top-small-padding  {
   padding: 2.5rem  1.25rem 0  1.25rem;
 }
 .float-left {
@@ -536,7 +536,7 @@ height:0;
 line-height:0;
 visibility:hidden;
 }
-.position-fixed  { 
+.position-fixed  {
   position: fixed;
   top: 0;
   width: 100%;
@@ -544,7 +544,7 @@ visibility:hidden;
 .center {
   display: block!important;
 }
-.border-radius  { 
+.border-radius  {
   border-radius: 3px;
 }
 .content-bottom {
@@ -575,9 +575,9 @@ visibility:hidden;
 .margin-top-bottom-0,.margin-top-bottom-10,.margin-top-bottom-15,.margin-top-bottom-20,.margin-top-bottom-30,.margin-top-bottom-40,.margin-top-bottom-50,.margin-top-bottom-60,.margin-top-bottom-70,.margin-top-bottom-80 {display: block;}
 .margin-top-0 {margin-top: 0 !important;}
 .margin-top-10 {margin-top: 10px !important;}
-.margin-top-15 {margin-top: 15px !important;} 
-.margin-top-20 {margin-top: 20px !important;} 
-.margin-top-30 {margin-top: 30px !important;} 
+.margin-top-15 {margin-top: 15px !important;}
+.margin-top-20 {margin-top: 20px !important;}
+.margin-top-30 {margin-top: 30px !important;}
 .margin-top-40 {margin-top: 40px !important;}
 .margin-top-50 {margin-top: 50px !important;}
 .margin-top-60 {margin-top: 60px !important;}
@@ -585,9 +585,9 @@ visibility:hidden;
 .margin-top-80 {margin-top: 80px !important;}
 .margin-bottom-0 {margin-bottom: 0 !important;}
 .margin-bottom-10 {margin-bottom: 10px !important;}
-.margin-bottom-15 {margin-bottom: 15px !important;} 
-.margin-bottom-20 {margin-bottom: 20px !important;} 
-.margin-bottom-30 {margin-bottom: 30px !important;} 
+.margin-bottom-15 {margin-bottom: 15px !important;}
+.margin-bottom-20 {margin-bottom: 20px !important;}
+.margin-bottom-30 {margin-bottom: 30px !important;}
 .margin-bottom-40 {margin-bottom: 40px !important;}
 .margin-bottom-50 {margin-bottom: 50px !important;}
 .margin-bottom-60 {margin-bottom: 60px !important;}
@@ -604,15 +604,15 @@ visibility:hidden;
 .margin-top-bottom-15 {
   margin-top: 15px !important;
   margin-bottom: 15px !important;
-} 
+}
 .margin-top-bottom-20 {
   margin-top: 20px !important;
   margin-bottom: 20px !important;
-} 
+}
 .margin-top-bottom-30 {
   margin-top: 30px !important;
   margin-bottom: 30px !important;
-} 
+}
 .margin-top-bottom-40 {
   margin-top: 40px !important;
   margin-bottom: 40px !important;
@@ -624,11 +624,11 @@ visibility:hidden;
 .margin-top-bottom-60 {
   margin-top: 60px !important;
   margin-bottom: 60px !important;
-} 
+}
 .margin-top-bottom-70 {
   margin-top: 70px !important;
   margin-bottom: 70px !important;
-} 
+}
 .margin-top-bottom-80 {
   margin-top: 80px !important;
   margin-bottom: 80px !important;
@@ -636,9 +636,9 @@ visibility:hidden;
 
 .margin-left-0 {margin-left: 0 !important;}
 .margin-left-10 {margin-left: 10px !important;}
-.margin-left-15 {margin-left: 15px !important;} 
-.margin-left-20 {margin-left: 20px !important;} 
-.margin-left-30 {margin-left: 30px !important;} 
+.margin-left-15 {margin-left: 15px !important;}
+.margin-left-20 {margin-left: 20px !important;}
+.margin-left-30 {margin-left: 30px !important;}
 .margin-left-40 {margin-left: 40px !important;}
 .margin-left-50 {margin-left: 50px !important;}
 .margin-left-60 {margin-left: 60px !important;}
@@ -646,14 +646,14 @@ visibility:hidden;
 .margin-left-80 {margin-left: 80px !important;}
 .margin-right-0 {margin-right: 0 !important;}
 .margin-right-10 {margin-right: 10px !important;}
-.margin-right-15 {margin-right: 15px !important;} 
-.margin-right-20 {margin-right: 20px !important;} 
-.margin-right-30 {margin-right: 30px !important;} 
+.margin-right-15 {margin-right: 15px !important;}
+.margin-right-20 {margin-right: 20px !important;}
+.margin-right-30 {margin-right: 30px !important;}
 .margin-right-40 {margin-right: 40px !important;}
 .margin-right-50 {margin-right: 50px !important;}
 .margin-right-60 {margin-right: 60px !important;}
 .margin-right-70 {margin-right: 70px !important;}
-.margin-right-80 {margin-right: 80px !important;}    
+.margin-right-80 {margin-right: 80px !important;}
 
 /* More info button */
 a.text-more-info {
@@ -730,7 +730,7 @@ a.text-more-info:hover:after {
   padding: 0;
   position: absolute;
   text-align: center;
-  top: 50%;    
+  top: 50%;
   width: 40px;
 }
 .carousel-bottom-arrows.owl-carousel .owl-nav div {
@@ -738,7 +738,7 @@ a.text-more-info:hover:after {
   top: auto;
 }
 .owl-carousel .owl-nav .owl-prev {
-  left: 0;    
+  left: 0;
 }
 .owl-carousel .owl-nav .owl-next {
   right: 0;
@@ -770,7 +770,7 @@ a.text-more-info:hover:after {
 }
 .owl-dots {
   margin-top: 0.625rem;
-} 
+}
 .carousel-main .owl-dots {
   bottom: 0;
   padding: 1.25rem 0;
@@ -863,26 +863,26 @@ form.customform input:hover, form.customform textarea:hover, form.customform sel
     .margin-xl-top-bottom-0,.margin-xl-top-bottom-10,.margin-xl-top-bottom-15,.margin-xl-top-bottom-20,.margin-xl-top-bottom-30,.margin-xl-top-bottom-40,.margin-xl-top-bottom-50,.margin-xl-top-bottom-60,.margin-xl-top-bottom-70,.margin-xl-top-bottom-80 {display: block;}
     .margin-xl-top-0 {margin-top: 0 !important;}
     .margin-xl-top-10 {margin-top: 10px !important;}
-    .margin-xl-top-15 {margin-top: 15px !important;} 
-    .margin-xl-top-20 {margin-top: 20px !important;} 
-    .margin-xl-top-30 {margin-top: 30px !important;} 
+    .margin-xl-top-15 {margin-top: 15px !important;}
+    .margin-xl-top-20 {margin-top: 20px !important;}
+    .margin-xl-top-30 {margin-top: 30px !important;}
     .margin-xl-top-40 {margin-top: 40px !important;}
     .margin-xl-top-50 {margin-top: 50px !important;}
     .margin-xl-top-60 {margin-top: 60px !important;}
     .margin-xl-top-70 {margin-top: 70px !important; }
     .margin-xl-top-80 {margin-top: 80px !important;}
-    
+
     .margin-xl-bottom-0 {margin-bottom: 0 !important;}
     .margin-xl-bottom-10 {margin-bottom: 10px !important;}
-    .margin-xl-bottom-15 {margin-bottom: 15px !important;} 
-    .margin-xl-bottom-20 {margin-bottom: 20px !important;} 
-    .margin-xl-bottom-30 {margin-bottom: 30px !important;} 
+    .margin-xl-bottom-15 {margin-bottom: 15px !important;}
+    .margin-xl-bottom-20 {margin-bottom: 20px !important;}
+    .margin-xl-bottom-30 {margin-bottom: 30px !important;}
     .margin-xl-bottom-40 {margin-bottom: 40px !important;}
     .margin-xl-bottom-50 {margin-bottom: 50px !important;}
     .margin-xl-bottom-60 {margin-bottom: 60px !important;}
     .margin-xl-bottom-70 {margin-bottom: 70px !important;}
     .margin-xl-bottom-80 {margin-bottom: 80px !important;}
-    
+
     .margin-xl-top-bottom-0 {
         margin-top: 0 !important;
         margin-bottom: 0 !important;
@@ -893,19 +893,19 @@ form.customform input:hover, form.customform textarea:hover, form.customform sel
     }
     .margin-xl-top-bottom-15 {
         margin-top: 15px !important;
-        margin-bottom: 15px !important; 
-    } 
+        margin-bottom: 15px !important;
+    }
     .margin-xl-top-bottom-20 {
         margin-top: 20px !important;
-        margin-bottom: 20px !important; 
-    } 
+        margin-bottom: 20px !important;
+    }
     .margin-xl-top-bottom-30 {
         margin-top: 30px !important;
-        margin-bottom: 30px !important; 
-    } 
+        margin-bottom: 30px !important;
+    }
     .margin-xl-top-bottom-40 {
         margin-top: 40px !important;
-        margin-bottom: 40px !important; 
+        margin-bottom: 40px !important;
     }
     .margin-xl-top-bottom-50 {
         margin-top: 50px !important;
@@ -913,22 +913,22 @@ form.customform input:hover, form.customform textarea:hover, form.customform sel
     }
     .margin-xl-top-bottom-60 {
         margin-top: 60px !important;
-        margin-bottom: 60px !important; 
-    } 
+        margin-bottom: 60px !important;
+    }
     .margin-xl-top-bottom-70 {
         margin-top: 70px !important;
         margin-bottom: 70px !important;
-    } 
+    }
     .margin-xl-top-bottom-80 {
         margin-top: 80px !important;
         margin-bottom: 80px !important;
     }
-    
+
     .margin-xl-left-0 {margin-left: 0 !important;}
     .margin-xl-left-10 {margin-left: 10px !important;}
-    .margin-xl-left-15 {margin-left: 15px !important;} 
-    .margin-xl-left-20 {margin-left: 20px !important;} 
-    .margin-xl-left-30 {margin-left: 30px !important;} 
+    .margin-xl-left-15 {margin-left: 15px !important;}
+    .margin-xl-left-20 {margin-left: 20px !important;}
+    .margin-xl-left-30 {margin-left: 30px !important;}
     .margin-xl-left-40 {margin-left: 40px !important;}
     .margin-xl-left-50 {margin-left: 50px !important;}
     .margin-xl-left-60 {margin-left: 60px !important;}
@@ -936,15 +936,15 @@ form.customform input:hover, form.customform textarea:hover, form.customform sel
     .margin-xl-left-80 {margin-left: 80px !important;}
     .margin-xl-right-0 {margin-right: 0 !important;}
     .margin-xl-right-10 {margin-right: 10px !important;}
-    .margin-xl-right-15 {margin-right: 15px !important;} 
-    .margin-xl-right-20 {margin-right: 20px !important;} 
-    .margin-xl-right-30 {margin-right: 30px !important;} 
+    .margin-xl-right-15 {margin-right: 15px !important;}
+    .margin-xl-right-20 {margin-right: 20px !important;}
+    .margin-xl-right-30 {margin-right: 30px !important;}
     .margin-xl-right-40 {margin-right: 40px !important;}
     .margin-xl-right-50 {margin-right: 50px !important;}
     .margin-xl-right-60 {margin-right: 60px !important;}
     .margin-xl-right-70 {margin-right: 70px !important;}
     .margin-xl-right-80 {margin-right: 80px !important;}
-    
+
     .text-xl-size-12,.text-xl-size-16,.text-xl-size-20,.text-xl-size-25,.text-xl-size-30,.text-xl-size-40,.text-xl-size-50,.text-xl-size-60,.text-xl-size-70,.text-xl-size-80,.text-xl-size-90.text-xl-size-100 {line-height: 1.4;}
     .text-xl-size-12 {font-size: 12px !important;}
     .text-xl-size-16 {font-size: 16px !important;}
@@ -954,10 +954,10 @@ form.customform input:hover, form.customform textarea:hover, form.customform sel
     .text-xl-size-40 {font-size: 40px !important;}
     .text-xl-size-50 {font-size: 50px !important;}
     .text-xl-size-60 {font-size: 60px !important;}
-    .text-xl-size-70 {font-size: 70px !important;}    
+    .text-xl-size-70 {font-size: 70px !important;}
     .text-xl-size-80 {font-size: 80px !important;}
     .text-xl-size-90 {font-size: 90px !important;}
-    .text-xl-size-100 {font-size: 100px !important;}  
+    .text-xl-size-100 {font-size: 100px !important;}
 }
 @media screen and (max-width:1140px) {
     .margin-l-bottom {
@@ -984,26 +984,26 @@ form.customform input:hover, form.customform textarea:hover, form.customform sel
     .margin-l-top-bottom-0,.margin-l-top-bottom-10,.margin-l-top-bottom-15,.margin-l-top-bottom-20,.margin-l-top-bottom-30,.margin-l-top-bottom-40,.margin-l-top-bottom-50,.margin-l-top-bottom-60,.margin-l-top-bottom-70,.margin-l-top-bottom-80 {display: block;}
     .margin-l-top-0 {margin-top: 0 !important;}
     .margin-l-top-10 {margin-top: 10px !important;}
-    .margin-l-top-15 {margin-top: 15px !important;} 
-    .margin-l-top-20 {margin-top: 20px !important;} 
-    .margin-l-top-30 {margin-top: 30px !important;} 
+    .margin-l-top-15 {margin-top: 15px !important;}
+    .margin-l-top-20 {margin-top: 20px !important;}
+    .margin-l-top-30 {margin-top: 30px !important;}
     .margin-l-top-40 {margin-top: 40px !important;}
     .margin-l-top-50 {margin-top: 50px !important;}
     .margin-l-top-60 {margin-top: 60px !important;}
     .margin-l-top-70 {margin-top: 70px !important; }
     .margin-l-top-80 {margin-top: 80px !important;}
-    
+
     .margin-l-bottom-0 {margin-bottom: 0 !important;}
     .margin-l-bottom-10 {margin-bottom: 10px !important;}
-    .margin-l-bottom-15 {margin-bottom: 15px !important;} 
-    .margin-l-bottom-20 {margin-bottom: 20px !important;} 
-    .margin-l-bottom-30 {margin-bottom: 30px !important;} 
+    .margin-l-bottom-15 {margin-bottom: 15px !important;}
+    .margin-l-bottom-20 {margin-bottom: 20px !important;}
+    .margin-l-bottom-30 {margin-bottom: 30px !important;}
     .margin-l-bottom-40 {margin-bottom: 40px !important;}
     .margin-l-bottom-50 {margin-bottom: 50px !important;}
     .margin-l-bottom-60 {margin-bottom: 60px !important;}
     .margin-l-bottom-70 {margin-bottom: 70px !important;}
     .margin-l-bottom-80 {margin-bottom: 80px !important;}
-    
+
     .margin-l-top-bottom-0 {
         margin-top: 0 !important;
         margin-bottom: 0 !important;
@@ -1014,19 +1014,19 @@ form.customform input:hover, form.customform textarea:hover, form.customform sel
     }
     .margin-l-top-bottom-15 {
         margin-top: 15px !important;
-        margin-bottom: 15px !important; 
-    } 
+        margin-bottom: 15px !important;
+    }
     .margin-l-top-bottom-20 {
         margin-top: 20px !important;
-        margin-bottom: 20px !important; 
-    } 
+        margin-bottom: 20px !important;
+    }
     .margin-l-top-bottom-30 {
         margin-top: 30px !important;
-        margin-bottom: 30px !important; 
-    } 
+        margin-bottom: 30px !important;
+    }
     .margin-l-top-bottom-40 {
         margin-top: 40px !important;
-        margin-bottom: 40px !important; 
+        margin-bottom: 40px !important;
     }
     .margin-l-top-bottom-50 {
         margin-top: 50px !important;
@@ -1034,22 +1034,22 @@ form.customform input:hover, form.customform textarea:hover, form.customform sel
     }
     .margin-l-top-bottom-60 {
         margin-top: 60px !important;
-        margin-bottom: 60px !important; 
-    } 
+        margin-bottom: 60px !important;
+    }
     .margin-l-top-bottom-70 {
         margin-top: 70px !important;
         margin-bottom: 70px !important;
-    } 
+    }
     .margin-l-top-bottom-80 {
         margin-top: 80px !important;
         margin-bottom: 80px !important;
     }
-    
+
     .margin-l-left-0 {margin-left: 0 !important;}
     .margin-l-left-10 {margin-left: 10px !important;}
-    .margin-l-left-15 {margin-left: 15px !important;} 
-    .margin-l-left-20 {margin-left: 20px !important;} 
-    .margin-l-left-30 {margin-left: 30px !important;} 
+    .margin-l-left-15 {margin-left: 15px !important;}
+    .margin-l-left-20 {margin-left: 20px !important;}
+    .margin-l-left-30 {margin-left: 30px !important;}
     .margin-l-left-40 {margin-left: 40px !important;}
     .margin-l-left-50 {margin-left: 50px !important;}
     .margin-l-left-60 {margin-left: 60px !important;}
@@ -1057,15 +1057,15 @@ form.customform input:hover, form.customform textarea:hover, form.customform sel
     .margin-l-left-80 {margin-left: 80px !important;}
     .margin-l-right-0 {margin-right: 0 !important;}
     .margin-l-right-10 {margin-right: 10px !important;}
-    .margin-l-right-15 {margin-right: 15px !important;} 
-    .margin-l-right-20 {margin-right: 20px !important;} 
-    .margin-l-right-30 {margin-right: 30px !important;} 
+    .margin-l-right-15 {margin-right: 15px !important;}
+    .margin-l-right-20 {margin-right: 20px !important;}
+    .margin-l-right-30 {margin-right: 30px !important;}
     .margin-l-right-40 {margin-right: 40px !important;}
     .margin-l-right-50 {margin-right: 50px !important;}
     .margin-l-right-60 {margin-right: 60px !important;}
     .margin-l-right-70 {margin-right: 70px !important;}
     .margin-l-right-80 {margin-right: 80px !important;}
-    
+
     .text-l-size-12,.text-l-size-16,.text-l-size-20,.text-l-size-25,.text-l-size-30,.text-l-size-40,.text-l-size-50,.text-l-size-60,.text-l-size-70,.text-l-size-80,.text-l-size-90.text-l-size-100 {line-height: 1.4;}
     .text-l-size-12 {font-size: 12px !important;}
     .text-l-size-16 {font-size: 16px !important;}
@@ -1075,10 +1075,10 @@ form.customform input:hover, form.customform textarea:hover, form.customform sel
     .text-l-size-40 {font-size: 40px !important;}
     .text-l-size-50 {font-size: 50px !important;}
     .text-l-size-60 {font-size: 60px !important;}
-    .text-l-size-70 {font-size: 70px !important;}    
+    .text-l-size-70 {font-size: 70px !important;}
     .text-l-size-80 {font-size: 80px !important;}
     .text-l-size-90 {font-size: 90px !important;}
-    .text-l-size-100 {font-size: 100px !important;}   
+    .text-l-size-100 {font-size: 100px !important;}
 }
 
 
@@ -1102,7 +1102,7 @@ form.customform input:hover, form.customform textarea:hover, form.customform sel
     .logo img {
       max-width: 172px;
       max-height: 40px;
-      margin: 0 auto; 
+      margin: 0 auto;
       width: auto;
     }
     .top-nav li a, .background-white .top-nav li a {
@@ -1155,26 +1155,26 @@ form.customform input:hover, form.customform textarea:hover, form.customform sel
     .margin-m-top-bottom-0,.margin-m-top-bottom-10,.margin-m-top-bottom-15,.margin-m-top-bottom-20,.margin-m-top-bottom-30,.margin-m-top-bottom-40,.margin-m-top-bottom-50,.margin-m-top-bottom-60,.margin-m-top-bottom-70,.margin-m-top-bottom-80 {display: block;}
     .margin-m-top-0 {margin-top: 0 !important;}
     .margin-m-top-10 {margin-top: 10px !important;}
-    .margin-m-top-15 {margin-top: 15px !important;} 
-    .margin-m-top-20 {margin-top: 20px !important;} 
-    .margin-m-top-30 {margin-top: 30px !important;} 
+    .margin-m-top-15 {margin-top: 15px !important;}
+    .margin-m-top-20 {margin-top: 20px !important;}
+    .margin-m-top-30 {margin-top: 30px !important;}
     .margin-m-top-40 {margin-top: 40px !important;}
     .margin-m-top-50 {margin-top: 50px !important;}
     .margin-m-top-60 {margin-top: 60px !important;}
     .margin-m-top-70 {margin-top: 70px !important; }
     .margin-m-top-80 {margin-top: 80px !important;}
-    
+
     .margin-m-bottom-0 {margin-bottom: 0 !important;}
     .margin-m-bottom-10 {margin-bottom: 10px !important;}
-    .margin-m-bottom-15 {margin-bottom: 15px !important;} 
-    .margin-m-bottom-20 {margin-bottom: 20px !important;} 
-    .margin-m-bottom-30 {margin-bottom: 30px !important;} 
+    .margin-m-bottom-15 {margin-bottom: 15px !important;}
+    .margin-m-bottom-20 {margin-bottom: 20px !important;}
+    .margin-m-bottom-30 {margin-bottom: 30px !important;}
     .margin-m-bottom-40 {margin-bottom: 40px !important;}
     .margin-m-bottom-50 {margin-bottom: 50px !important;}
     .margin-m-bottom-60 {margin-bottom: 60px !important;}
     .margin-m-bottom-70 {margin-bottom: 70px !important;}
     .margin-m-bottom-80 {margin-bottom: 80px !important;}
-    
+
     .margin-m-top-bottom-0 {
         margin-top: 0 !important;
         margin-bottom: 0 !important;
@@ -1185,19 +1185,19 @@ form.customform input:hover, form.customform textarea:hover, form.customform sel
     }
     .margin-m-top-bottom-15 {
         margin-top: 15px !important;
-        margin-bottom: 15px !important; 
-    } 
+        margin-bottom: 15px !important;
+    }
     .margin-m-top-bottom-20 {
         margin-top: 20px !important;
-        margin-bottom: 20px !important; 
-    } 
+        margin-bottom: 20px !important;
+    }
     .margin-m-top-bottom-30 {
         margin-top: 30px !important;
-        margin-bottom: 30px !important; 
-    } 
+        margin-bottom: 30px !important;
+    }
     .margin-m-top-bottom-40 {
         margin-top: 40px !important;
-        margin-bottom: 40px !important; 
+        margin-bottom: 40px !important;
     }
     .margin-m-top-bottom-50 {
         margin-top: 50px !important;
@@ -1205,22 +1205,22 @@ form.customform input:hover, form.customform textarea:hover, form.customform sel
     }
     .margin-m-top-bottom-60 {
         margin-top: 60px !important;
-        margin-bottom: 60px !important; 
-    } 
+        margin-bottom: 60px !important;
+    }
     .margin-m-top-bottom-70 {
         margin-top: 70px !important;
         margin-bottom: 70px !important;
-    } 
+    }
     .margin-m-top-bottom-80 {
         margin-top: 80px !important;
         margin-bottom: 80px !important;
     }
-    
+
     .margin-m-left-0 {margin-left: 0 !important;}
     .margin-m-left-10 {margin-left: 10px !important;}
-    .margin-m-left-15 {margin-left: 15px !important;} 
-    .margin-m-left-20 {margin-left: 20px !important;} 
-    .margin-m-left-30 {margin-left: 30px !important;} 
+    .margin-m-left-15 {margin-left: 15px !important;}
+    .margin-m-left-20 {margin-left: 20px !important;}
+    .margin-m-left-30 {margin-left: 30px !important;}
     .margin-m-left-40 {margin-left: 40px !important;}
     .margin-m-left-50 {margin-left: 50px !important;}
     .margin-m-left-60 {margin-left: 60px !important;}
@@ -1228,15 +1228,15 @@ form.customform input:hover, form.customform textarea:hover, form.customform sel
     .margin-m-left-80 {margin-left: 80px !important;}
     .margin-m-right-0 {margin-right: 0 !important;}
     .margin-m-right-10 {margin-right: 10px !important;}
-    .margin-m-right-15 {margin-right: 15px !important;} 
-    .margin-m-right-20 {margin-right: 20px !important;} 
-    .margin-m-right-30 {margin-right: 30px !important;} 
+    .margin-m-right-15 {margin-right: 15px !important;}
+    .margin-m-right-20 {margin-right: 20px !important;}
+    .margin-m-right-30 {margin-right: 30px !important;}
     .margin-m-right-40 {margin-right: 40px !important;}
     .margin-m-right-50 {margin-right: 50px !important;}
     .margin-m-right-60 {margin-right: 60px !important;}
     .margin-m-right-70 {margin-right: 70px !important;}
     .margin-m-right-80 {margin-right: 80px !important;}
-    
+
     .text-m-size-12,.text-m-size-16,.text-m-size-20,.text-m-size-25,.text-m-size-30,.text-m-size-40,.text-m-size-50,.text-m-size-60,.text-m-size-70,.text-m-size-80,.text-m-size-90.text-m-size-100 {line-height: 1.4;}
     .text-m-size-12 {font-size: 12px !important;}
     .text-m-size-16 {font-size: 16px !important;}
@@ -1246,17 +1246,17 @@ form.customform input:hover, form.customform textarea:hover, form.customform sel
     .text-m-size-40 {font-size: 40px !important;}
     .text-m-size-50 {font-size: 50px !important;}
     .text-m-size-60 {font-size: 60px !important;}
-    .text-m-size-70 {font-size: 70px !important;}    
+    .text-m-size-70 {font-size: 70px !important;}
     .text-m-size-80 {font-size: 80px !important;}
     .text-m-size-90 {font-size: 90px !important;}
-    .text-m-size-100 {font-size: 100px !important;}    
+    .text-m-size-100 {font-size: 100px !important;}
     .owl-nav {
       display: none;
     }
     .carousel-blocks, .carousel-3-blocks, .carousel-5-blocks {
       padding: 0;
     }
-}  
+}
 
 /* -480px version */
 @media screen and (max-width:480px) {
@@ -1281,7 +1281,7 @@ form.customform input:hover, form.customform textarea:hover, form.customform sel
         display: block;
     }
     .margin-s-bottom {
-        margin-bottom: 1.25rem !important; 
+        margin-bottom: 1.25rem !important;
         display: block;
     }
     .margin-s-left {
@@ -1304,26 +1304,26 @@ form.customform input:hover, form.customform textarea:hover, form.customform sel
     .margin-s-top-bottom-0,.margin-s-top-bottom-10,.margin-s-top-bottom-15,.margin-s-top-bottom-20,.margin-s-top-bottom-30,.margin-s-top-bottom-40,.margin-s-top-bottom-50,.margin-s-top-bottom-60,.margin-s-top-bottom-70,.margin-s-top-bottom-80 {display: block;}
     .margin-s-top-0 {margin-top: 0 !important;}
     .margin-s-top-10 {margin-top: 10px !important;}
-    .margin-s-top-15 {margin-top: 15px !important;} 
-    .margin-s-top-20 {margin-top: 20px !important;} 
-    .margin-s-top-30 {margin-top: 30px !important;} 
+    .margin-s-top-15 {margin-top: 15px !important;}
+    .margin-s-top-20 {margin-top: 20px !important;}
+    .margin-s-top-30 {margin-top: 30px !important;}
     .margin-s-top-40 {margin-top: 40px !important;}
     .margin-s-top-50 {margin-top: 50px !important;}
     .margin-s-top-60 {margin-top: 60px !important;}
     .margin-s-top-70 {margin-top: 70px !important; }
     .margin-s-top-80 {margin-top: 80px !important;}
-    
+
     .margin-s-bottom-0 {margin-bottom: 0 !important;}
     .margin-s-bottom-10 {margin-bottom: 10px !important;}
-    .margin-s-bottom-15 {margin-bottom: 15px !important;} 
-    .margin-s-bottom-20 {margin-bottom: 20px !important;} 
-    .margin-s-bottom-30 {margin-bottom: 30px !important;} 
+    .margin-s-bottom-15 {margin-bottom: 15px !important;}
+    .margin-s-bottom-20 {margin-bottom: 20px !important;}
+    .margin-s-bottom-30 {margin-bottom: 30px !important;}
     .margin-s-bottom-40 {margin-bottom: 40px !important;}
     .margin-s-bottom-50 {margin-bottom: 50px !important;}
     .margin-s-bottom-60 {margin-bottom: 60px !important;}
     .margin-s-bottom-70 {margin-bottom: 70px !important;}
     .margin-s-bottom-80 {margin-bottom: 80px !important;}
-    
+
     .margin-s-top-bottom-0 {
         margin-top: 0 !important;
         margin-bottom: 0 !important;
@@ -1334,19 +1334,19 @@ form.customform input:hover, form.customform textarea:hover, form.customform sel
     }
     .margin-s-top-bottom-15 {
         margin-top: 15px !important;
-        margin-bottom: 15px !important; 
-    } 
+        margin-bottom: 15px !important;
+    }
     .margin-s-top-bottom-20 {
         margin-top: 20px !important;
-        margin-bottom: 20px !important; 
-    } 
+        margin-bottom: 20px !important;
+    }
     .margin-s-top-bottom-30 {
         margin-top: 30px !important;
-        margin-bottom: 30px !important; 
-    } 
+        margin-bottom: 30px !important;
+    }
     .margin-s-top-bottom-40 {
         margin-top: 40px !important;
-        margin-bottom: 40px !important; 
+        margin-bottom: 40px !important;
     }
     .margin-s-top-bottom-50 {
         margin-top: 50px !important;
@@ -1354,22 +1354,22 @@ form.customform input:hover, form.customform textarea:hover, form.customform sel
     }
     .margin-s-top-bottom-60 {
         margin-top: 60px !important;
-        margin-bottom: 60px !important; 
-    } 
+        margin-bottom: 60px !important;
+    }
     .margin-s-top-bottom-70 {
         margin-top: 70px !important;
         margin-bottom: 70px !important;
-    } 
+    }
     .margin-s-top-bottom-80 {
         margin-top: 80px !important;
         margin-bottom: 80px !important;
     }
-    
+
     .margin-s-left-0 {margin-left: 0 !important;}
     .margin-s-left-10 {margin-left: 10px !important;}
-    .margin-s-left-15 {margin-left: 15px !important;} 
-    .margin-s-left-20 {margin-left: 20px !important;} 
-    .margin-s-left-30 {margin-left: 30px !important;} 
+    .margin-s-left-15 {margin-left: 15px !important;}
+    .margin-s-left-20 {margin-left: 20px !important;}
+    .margin-s-left-30 {margin-left: 30px !important;}
     .margin-s-left-40 {margin-left: 40px !important;}
     .margin-s-left-50 {margin-left: 50px !important;}
     .margin-s-left-60 {margin-left: 60px !important;}
@@ -1377,15 +1377,15 @@ form.customform input:hover, form.customform textarea:hover, form.customform sel
     .margin-s-left-80 {margin-left: 80px !important;}
     .margin-s-right-0 {margin-right: 0 !important;}
     .margin-s-right-10 {margin-right: 10px !important;}
-    .margin-s-right-15 {margin-right: 15px !important;} 
-    .margin-s-right-20 {margin-right: 20px !important;} 
-    .margin-s-right-30 {margin-right: 30px !important;} 
+    .margin-s-right-15 {margin-right: 15px !important;}
+    .margin-s-right-20 {margin-right: 20px !important;}
+    .margin-s-right-30 {margin-right: 30px !important;}
     .margin-s-right-40 {margin-right: 40px !important;}
     .margin-s-right-50 {margin-right: 50px !important;}
     .margin-s-right-60 {margin-right: 60px !important;}
     .margin-s-right-70 {margin-right: 70px !important;}
     .margin-s-right-80 {margin-right: 80px !important;}
-    
+
     .text-s-size-12,.text-s-size-16,.text-s-size-20,.text-s-size-25,.text-s-size-30,.text-s-size-40,.text-s-size-50,.text-s-size-60,.text-s-size-70,.text-s-size-80,.text-s-size-90.text-s-size-100 {line-height: 1.4;}
     .text-s-size-12 {font-size: 12px !important;}
     .text-s-size-16 {font-size: 16px !important;}
@@ -1395,11 +1395,11 @@ form.customform input:hover, form.customform textarea:hover, form.customform sel
     .text-s-size-40 {font-size: 40px !important;}
     .text-s-size-50 {font-size: 50px !important;}
     .text-s-size-60 {font-size: 60px !important;}
-    .text-s-size-70 {font-size: 70px !important;}    
+    .text-s-size-70 {font-size: 70px !important;}
     .text-s-size-80 {font-size: 80px !important;}
     .text-s-size-90 {font-size: 90px !important;}
-    .text-s-size-100 {font-size: 100px !important;}  
-}  
+    .text-s-size-100 {font-size: 100px !important;}
+}
 
 /* Typography */
 .text-uppercase {
@@ -1412,17 +1412,17 @@ form.customform input:hover, form.customform textarea:hover, form.customform sel
 
 
 /* Custom Template Styles */
-/* Containers */ 
-.section  { 
+/* Containers */
+.section  {
   padding: 7rem 1.25rem;
 }
-.section-top-padding  { 
+.section-top-padding  {
   padding: 7rem 1.25rem 0  1.25rem;
 }
-.section-block { 
+.section-block {
   padding: 7rem 2.5rem;
 }
-.section-block-2x { 
+.section-block-2x {
   padding: 7rem 5rem;
 }
 .text-padding {
@@ -1432,7 +1432,7 @@ form.customform input:hover, form.customform textarea:hover, form.customform sel
 .text-padding-small {
   display: inline-block !important;
   padding: 7px 10px;
-}               
+}
 
 #map {
   width: 100%;
@@ -1443,10 +1443,10 @@ form.customform input:hover, form.customform textarea:hover, form.customform sel
   .block-same-height {
     display: block;
   }
-  .section-block-2x { 
+  .section-block-2x {
     padding: 7rem 2.5rem;
   }
-}  
+}
 .margin-left-150 {
   margin-left: 150px;
 }
@@ -1455,12 +1455,12 @@ form.customform input:hover, form.customform textarea:hover, form.customform sel
 }
 
 
-body, p { 
+body, p {
   color: #999;
   font-weight: 300;
-  font-family: "Poppins"; 
-  font-size: 0.92rem;  
-} 
+  font-family: "Poppins";
+  font-size: 0.92rem;
+}
 .background-white, .background-white p, a.background-white, .background-white a, .background-white a:link, .background-white a:visited, .background-white a:hover, .background-white a:active {
   color: #999;
 }
@@ -1507,7 +1507,7 @@ hr.break {
   border-top: 2px dotted #454545;
   background: none!important;
   background-color: none!important;
-}  
+}
 
 /* Breaks */
 hr.break-small.break-center {
@@ -1567,7 +1567,7 @@ nav.fixed, .fixed nav {
   padding: 0 2em;
 }
 nav.fixed .top-nav li a, .fixed nav .top-nav li a {
-  color: #444;  
+  color: #444;
 }
 nav.fixed .logo-white, .fixed nav .logo-white {
   display:none;
@@ -1575,13 +1575,13 @@ nav.fixed .logo-white, .fixed nav .logo-white {
 nav.fixed .logo-dark, .fixed nav .logo-dark {
   display:block;
   width: 60px;
-}  
+}
 nav.fixed .left-menu, nav.fixed .right-menu {
     padding: 0;
 }
 .background-transparent {
   background: none;
-}  
+}
 .custom-button {
   margin-top: 200px;
   margin-bottom: -20px;
@@ -1616,7 +1616,7 @@ nav.fixed .left-menu, nav.fixed .right-menu {
 -ms-transition: all 0.20s linear 0s;
 -moz-transition: all 0.20s linear 0s;
 -webkit-transition: all 0.20s linear 0s;
-} 
+}
 
 .top-nav ul ul {
   background: #fff none repeat scroll 0 0;
@@ -1660,14 +1660,14 @@ nav.fixed .left-menu, nav.fixed .right-menu {
 
 /* Menu dott color */
 .background-white-dott .top-nav > div > ul > li > a::before, .primary-color-white .background-primary-dott .top-nav > div > ul > li > a::before {background: #fff none repeat scroll 0 0;}
-.background-primary-dott .top-nav > div > ul > li > a::before, .primary-color-primary .background-primary-dott .top-nav > div > ul > li > a::before {background: #28a5df none repeat scroll 0 0;} 
+.background-primary-dott .top-nav > div > ul > li > a::before, .primary-color-primary .background-primary-dott .top-nav > div > ul > li > a::before {background: #28a5df none repeat scroll 0 0;}
 .background-dark-dott .top-nav > div > ul > li > a::before, .primary-color-dark .background-primary-dott .top-nav > div > ul > li > a::before {background: #434343 none repeat scroll 0 0;}
 
 /* Menu font color */
 .background-white-dott .top-nav > div > ul ul li.active-item > a, .primary-color-white .background-primary-dott .top-nav > div > ul ul li.active-item > a,
 .background-white-dott .top-nav > div > ul ul li > a:hover, .primary-color-white .background-primary-dott .top-nav > div > ul ul li > a:hover {color: #fff !important;}
 .background-primary-dott .top-nav > div > ul ul li.active-item > a, .primary-color-primary .background-primary-dott .top-nav > div > ul ul li.active-item > a,
-.background-primary-dott .top-nav > div > ul ul li > a:hover, .primary-color-primary .background-primary-dott .top-nav > div > ul ul li > a:hover {color: #28a5df !important;} 
+.background-primary-dott .top-nav > div > ul ul li > a:hover, .primary-color-primary .background-primary-dott .top-nav > div > ul ul li > a:hover {color: #28a5df !important;}
 .background-dark-dott .top-nav > div > ul ul li.active-item > a, .primary-color-dark .background-primary-dott .top-nav > div > ul ul li.active-item > a,
 .background-dark-dott .top-nav > div > ul ul li > a:hover, .primary-color-dark .background-primary-dott .top-nav > div > ul ul li > a:hover {color: #434343 !important;}
 
@@ -1699,7 +1699,7 @@ section, header {
   bottom: -1px;
   width: 100%;
   left: 0;
-} 
+}
 @media screen and (max-width:480px) {
   .aside-nav li a {text-align: left;}
 }
@@ -1718,14 +1718,14 @@ a.tab-label, a.tab-label:link, a.tab-label:visited, a.tab-label:hover, .backgrou
 .owl-dots {
   margin-top: 1.25rem;
 }
-.owl-carousel .owl-dot span { 
+.owl-carousel .owl-dot span {
   background: #434343;
   height: 7px;
   margin: 0 3px;
   width: 7px;
   border-radius: 10px;
   filter: Alpha(Opacity=30);
-  opacity: 0.3;  
+  opacity: 0.3;
 }
 .background-dark .owl-carousel .owl-dot span {
   background: #fff;
@@ -1781,14 +1781,14 @@ a.tab-label.active-btn {
   .logo img {
     max-width: 172px;
     max-height: 40px;
-    margin: 0 auto; 
+    margin: 0 auto;
     width: auto;
     top: 0;
-  } 
+  }
   .logo {
     height: 60px;
     display: block;
-  }  
+  }
   .nav-text::after {
     color: #454545;
   }
@@ -1801,7 +1801,7 @@ a.tab-label.active-btn {
   }
   .fixed .nav-text::after {
     color: #454545;
-  }  
+  }
   .top-nav, .nav-text, .top-nav li a, .background-white .top-nav li a {
     background: none repeat scroll 0 0 #454545;
   }
@@ -1809,7 +1809,7 @@ a.tab-label.active-btn {
     display: none;
   }
   nav.fixed .top-nav li a, .fixed nav .top-nav li a {
-    color: #fff;  
+    color: #fff;
   }
   nav.fixed .logo-white, .fixed nav .logo-white {
     display:none;
@@ -1817,14 +1817,14 @@ a.tab-label.active-btn {
   nav.fixed .logo-dark, .fixed nav .logo-dark, .logo-dark {
     display:block;
     width: auto;
-  } 
+  }
   nav.fixed, .fixed nav {
     padding: 10px 0;
   }
   .left-menu, .right-menu {
     width: 100%;
     padding-top: 0;
-  } 
+  }
   .top-nav.left-menu, .top-nav.right-menu {
     position: relative;
     z-index: 10;
@@ -1848,4 +1848,4 @@ a.tab-label.active-btn {
   .background-image {
     background-position: center;
   }
-} 
+}
