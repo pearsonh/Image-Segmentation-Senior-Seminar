@@ -8,10 +8,13 @@ import time
 from scipy.spatial import distance
 from scipy.stats import norm
 import sys
+import os
+import eval
+import parser
 
 #seeds:
 # --random seeds, run multiple times and average
-# __chosen seeds somehow: pick first at random, use prob function to place laters far away
+# **chosen seeds somehow: pick first at random, use prob function to place laters far away
 
 #features:
 # __use physical distance as well as rgb??? normalize, play with weights?
@@ -20,7 +23,7 @@ import sys
 
 #determining k:
 # __his0tograms to determine k (mean shift?)
-# __elbow method to determine k: run for 1<k<10, plot within-cluster sum of squares, look for "elbow"
+# **elbow method to determine k: run for 1<k<10, plot within-cluster sum of squares, look for "elbow"
 # __silhouette method (cohesion/separation)
 
 #misc:
@@ -28,7 +31,7 @@ import sys
 # --smoothing
 
 #distance metrics:
-# __euclidean: standard root of summed squares
+# **euclidean: standard root of summed squares
 # __mahalanobis: more flexible, less circular? euclidean divided by squared variance
 
 
@@ -77,7 +80,6 @@ def shift(value, pixels, bandwidth):
     return shifts/total
 
 def random_seed_locations_and_values(k, image):
-    random.seed(0)
     locations = np.zeros((k,2))
     centroids = np.zeros((k,5))
     for i in range(k):
@@ -94,7 +96,6 @@ def random_seed_locations_and_values(k, image):
     return centroids
 
 def random_seed_values(k, image):
-    random.seed(0)
     centroids = np.zeros((k,2))
     values = np.zeros((k,3))
     for i in range(k):
@@ -111,7 +112,7 @@ def random_seed_values(k, image):
     return values
 
 def probabilistic_seed_values(k, image):
-    random.seed(0)
+    #random.seed(0)
     values = np.zeros((k,3))
     #might want to switch this to geographic?
     new = [0, 0, 0]
@@ -137,7 +138,7 @@ def probabilistic_seed_values(k, image):
         values[i]=img2[index]
     return values
 
-def expectation_maximization(image, k, features='rgb', seed='random'):
+def expectation_maximization_with_k(image, k, features='rgb', seed='random'):
     #initialize clusters w/seed values and also covariance matrices and weights (1/k for all)
     img=np.array(image).astype("int")
     #initialize means (ie centroids)
@@ -158,9 +159,9 @@ def expectation_maximization(image, k, features='rgb', seed='random'):
         covariances[i]=covariance
     #initialize weights
     weights=np.full(k, 1.0/k)
-    print(centroids)
-    print(covariances)
-    print(weights)
+    #print(centroids)
+    #print(covariances)
+    #print(weights)
     #calculate conditional probabilities P(C | p) (gaussian?)
     #update params
     while True:
@@ -170,10 +171,10 @@ def expectation_maximization(image, k, features='rgb', seed='random'):
         if np.allclose(centroids, old_means, atol=1.0, rtol=0.0):
             #should this compare all changes? or just ones in most important cells?
             image_matrix=np.ndarray.argmax(image_matrix, axis=-1)
-            print(image_matrix.shape)
-            return np.asfarray(image_matrix)
+            #print(image_matrix.shape)
+            return np.asfarray(image_matrix), np.asfarray(centroids)
         old_means=centroids
-    return image_matrix
+    return np.asfarray(image_matrix), np.asfarray(centroids)
 
 def expectation_cluster(img, centroids, covariances, weights, features):
     centroid_totals = np.zeros((len(centroids),len(centroids[0])))
@@ -193,10 +194,11 @@ def expectation_cluster(img, centroids, covariances, weights, features):
         for j in range(img.shape[1]):
             cluster_probabilities+=image_matrix[i,j]
             cluster_means+=np.outer(image_matrix[i,j], img[i,j])
-    #means
-    cluster_means=cluster_means/cluster_probabilities[:,None]
     #weights
     cluster_weights=cluster_probabilities/(img.shape[0]*img.shape[1])
+    cluster_probabilities=np.where(cluster_probabilities==0, 1, cluster_probabilities)
+    #means
+    cluster_means=cluster_means/cluster_probabilities[:,None]
     #covariances
     for k in range(centroids.shape[0]):
         for i in range(img.shape[0]):
@@ -229,10 +231,15 @@ def find_centroid_expectations(pixel, centroids, centroid_totals, centroid_total
         probabilities[i]=prob_cluster
     return probabilities
 
-def kmeans(image, features='rgb', seed='random'):
-    elbow_method(image, 10)
+def expectation_maximization(image, features='rgb', seed='random'):
+    image=image.convert("HSV")
+    return elbow_method(image, 10, type='em')
 
-def kmeans(image, k, features='rgb', seed='random'):
+def kmeans(image, features='rgb', seed='random'):
+    image=image.convert("HSV")
+    return elbow_method(image, 10)
+
+def kmeans_with_k(image, k, features='rgb', seed='random'):
     '''Runs kmeans segmentation on the given image into k segments
     '''
     img=np.array(image).astype("int")
@@ -251,13 +258,18 @@ def kmeans(image, k, features='rgb', seed='random'):
         centroids=probabilistic_seed_values(k,img)
         old_means=np.zeros((k,3))
     #continously updates the centroids and cluster assignments
+    iterations=0
+    tolerance=1.0
     while True:
         image_matrix, centroids = cluster(img, centroids, features)
         #print(centroids-old_means)
         #accepts the image matrix if no centroid value has changed by more than 1.0
-        if np.allclose(centroids, old_means, atol=1.0, rtol=0.0):
+        if iterations>10:
+            tolerance+=.1
+        if np.allclose(centroids, old_means, atol=tolerance, rtol=0.0):
             return image_matrix, centroids
         old_means=centroids
+        iterations+=1
     return image_matrix
 
 def euclidean_color_and_distance(centroid, pixel, shape):
@@ -313,16 +325,22 @@ def cluster(image, centroids, features):
                 current=np.append(image[i][j], [i,j])
             image_matrix[i][j] = find_closest_centroid(current, centroids, centroid_totals, centroid_total_counts, image_matrix.shape, features)
     #currently it is quicker to loop rather than use numpy indexing
+    #need to support if a centroid count is 0
+    #something is going weird here
+    #for i in range(centroid_total_counts.shape[0]):
+    #    if centroid_total_counts[i]==0:
+    #        centroid_totals[i]=[np.nan]*len(centroid_totals[i])
+    centroid_total_counts=np.where(centroid_total_counts==0, 1, centroid_total_counts)
+    #print(centroid_totals)
+    #print(centroid_total_counts)
     cluster_means=centroid_totals/centroid_total_counts[:, None]
     #computes average rgb values for each cluster
     #for i in range(len(centroid_totals)):
     #    total=centroid_totals[i]
     #    sum=centroid_total_counts[i]
     #    cluster_means.append(total/sum)
+    #print(cluster_means)
     return image_matrix, cluster_means
-
-def determine_k():
-    return
 
 def silhouette_method(image, max_k):
     #need to run some kind of maximization for score?
@@ -337,27 +355,56 @@ def silhouette_method(image, max_k):
         scores[i]=silhouette_score(segmentation, img, k)
     return segmentation[np.argmax(scores)]
 
-
-def elbow_method(image, max_k):
+def elbow_method(image, max_k, type='kmeans'):
+    start=time.time()
     image=np.array(image).astype("int")
-    scores=[]
-    segmentations=[]
+    scores=np.zeros(max_k+1)
+    segmentations=[0]*(max_k+1)
     for i in range(1, max_k+1):
-        print("segmenting: ", i)
-        segmentation, centroids=kmeans(image, i)
-        segmentations.append(segmentation)
-        print("evaluating: ", i)
+        #print("segmenting: ", i)
+        if type=='kmeans':
+            segmentation, centroids=kmeans_with_k(image, i, seed='prob')
+        else:
+            segmentation, centroids=expectation_maximization_with_k(image, i, seed='prob')
+        segmentations[i]=segmentation
+        #print("evaluating: ", i)
         score=elbow_score(segmentation, image, i, centroids)
-        scores.append(score)
+        #print(score)
+        scores[i]=score
+        if i>2:
+            line_slope=(score-scores[1])/(i-1)
+            #denom=math.sqrt((score-scores[1])**2+(i-1)**2)
+            #num = max_k*scores[1]-score
+            #dist1=abs((score-scores[1])*(i-1) - (i-1)*scores[i-1] + num)/denom
+            #dist2=abs((score-scores[1])*(i-2) - (i-1)*scores[i-2] + num)/denom
+            #if dist1<dist2:
+            #    print("dist")
+            #    print(i-2)
+            #    return segmentations[i-2]
+            if (scores[1]+(line_slope*(i-1))-scores[i-1]) < (scores[0]+(line_slope*(i-2))-scores[i-2]):
+                print(i-2)
+                return segmentations[i-2]
     #print(scores)
-    line_slope=(scores[-1]-scores[0])/max_k
-    distances=np.zeros(max_k)
-    for i in range(max_k):
-        corresponding=scores[0]+(line_slope*i)
+    line_slope=(scores[-1]-scores[1])/(max_k-1)
+    distances=np.zeros(max_k+1)
+    #https://stackoverflow.com/questions/39840030/distance-between-point-and-a-line-from-two-points/39840218
+    #distance from P3 perpendicular to a line drawn between P1 and P2.
+    #d = norm(np.cross(p2-p1, p1-p3))/norm(p2-p1)
+    #d=np.cross(p2-p1,p3-p1)/norm(p2-p1)
+    #line = np.linalg.norm([scores[-1], max_k], [s])
+    #y=scores[-1]-scores[1]
+    #x=max_k-1
+    #denom=math.sqrt(y**2+x**2)
+    for i in range(1, max_k+1):
+        corresponding=scores[1]+(line_slope*i)
         distances[i]=corresponding-scores[i]
+        #distances[i]=abs((y*i-x*scores[i]+max_k*scores[1]-scores[-1]))/denom
     index=np.argmax(distances)
     #print(distances)
-    print("k=", index+1)
+    #print("k=", index+1)
+    print(index)
+    stop=time.time()
+    print(stop-start)
     return segmentations[index]
 
 def elbow_score(segmentation, image, k, centroids):
@@ -402,17 +449,44 @@ def silhouette_score(segmentation, image, k):
     return value/flat_segs.shape[0]
 
 if __name__ == "__main__":
-    start=time.time()
-    img = Image.open("22093.jpg")
+    filenames = os.listdir("training")
+    #print(filenames)
+    print("filename  color  color and dist")
+    for i in range(0, len(filenames), 2):
+        random.seed(0)
+        filename=filenames[i]
+        print(filename)
+        image=Image.open("training/"+filename)
+        image=image.convert("HSV")
+        #truth = parser.import_berkeley("training_truths/"+filename[:-3]+"seg")
+        segmentation = kmeans(image)
+        img = Image.fromarray(segmentation*30)
+        img.show()
+        #segmentation1 = kmeans_with_k(image, 4, features='rgb')[0]
+        #segmentation1 = kmeans_with_k(image, 4, seed='prob')[0]
+        #print(segmentation1)
+        #print("1")
+        #segmentation2 = kmeans_with_k(image, 4, features='dist')[0]
+        #print("eval")
+        #score1 = eval.bde(segmentation1, truth)
+        #score2 = eval.bde(segmentation2, truth)
+        #print(filename, k)
+        #print(filename, score1, score2)
+        #result = Image.fromarray(segmentation*30)
+        #result = result.convert("RGB")
+        #result.save("training_results/"+filename)
+
+    #start=time.time()
+    #img = Image.open("22093.jpg")
     #HSV is potentially better than rgb, needs more testing
     #img=img.convert("HSV")
     #img=Image.fromarray(mean_shift(img, 50)*200)
     #img=kmeans(img, 4, seed="prob")
     #img=expectation_maximization(img, 4)
-    img=elbow_method(img, 6)
-    np.set_printoptions(threshold=sys.maxsize)
+    #img=elbow_method(img, 6)
+    #np.set_printoptions(threshold=sys.maxsize)
     #print(img*30)
-    img = Image.fromarray(img*30)
-    stop=time.time()
-    print("runtime is", stop-start)
-    img.show()
+    #img = Image.fromarray(img*30)
+    #stop=time.time()
+    #print("runtime is", stop-start)
+    #img.show()
