@@ -4,18 +4,19 @@ from skimage.filters import threshold_otsu, threshold_multiotsu
 import os
 from collections import Counter
 
-from eval import bde
-import parser
-
 
 def otsu_greyspace_thresholding(image):
+    '''A function that takes in a PIL Image object and outputs a 2d numpy
+    array of segmentation assignments per pixel using Otsu's method on
+    a grayscale histogram'''
+
+
     #Creates a greyscale version of the input image
     imageGrey = image.convert(mode="L")
 
     x, y = imageGrey.size
     #Gets a threshold for the image
     threshold = get_histogram_threshold(imageGrey)[0]
-    print(threshold)
     returnImage = np.zeros(shape=(y,x))
     segments = len(threshold)
     #Maps 1's and 0's based on whether the pixel values are above or below the threshold.
@@ -24,6 +25,9 @@ def otsu_greyspace_thresholding(image):
             for i in range(y):
                 returnImage[i,j] = 1 if imageGrey.getpixel((j,i)) > threshold else 0
     else:
+        #This code is no longer used, as it was specified that threshold is now the
+        #first element. Previously, if Otsu's found two values with the same minimum
+        #variance both would be returned.
         for j in range(x):
             for i in range(y):
                 if imageGrey.getpixel((j,i)) < threshold[0]:
@@ -36,15 +40,22 @@ def otsu_greyspace_thresholding(image):
     return returnImage
 
 def otsu_multi_greyspace_thresholding(image, segments):
+    '''Takes in a PIL image and a number of segments, and runs the
+    multi-threshold variant of Otsu's with the specified hyperparameter.
+    Outputs a 2d array with pixel segment assignments.'''
+
     imageGrey = image.convert(mode="L")
 
     x, y = imageGrey.size
-    print(imageGrey.histogram())
     #Gets a threshold for the image
     thresholds = threshold_multiotsu(np.array(image), segments)
-    print(thresholds)
+
+    #While thresholds are supposed to already be sorted properly,
+    #this ensures that they are.
+    thresholds = sorted(thresholds)
     returnImage = np.zeros(shape=(y,x))
-    #Maps 1's and 0's based on whether the pixel values are above or below the threshold.
+    #Assigns segments to each pixel based off of which threshold it is above.
+    #Threshold
     for j in range(x):
         for i in range(y):
             segment = 0
@@ -53,13 +64,11 @@ def otsu_multi_greyspace_thresholding(image, segments):
                     segment = p + 1
             returnImage[i,j] = segment
 
-    returnImage = smoothy(returnImage)
-    unique_elements, counts_elements = np.unique(returnImage, return_counts=True)
-    print("Frequency of unique values of the said array:")
-    print(np.asarray((unique_elements, counts_elements)))
-    return returnImage, segments
+    return returnImage
 
 def smoothy(image_array):
+    '''Experimental function to smooth a segmentation. Ran into issues implementing,
+    but have left the code here.'''
     x, y = image_array.shape
     for i in range(1,x-1):
         for j in range(1,y-1):
@@ -75,6 +84,7 @@ def smoothy(image_array):
 
 
 def check_neighbors(image_array,x,y):
+    '''Experimental helper function, no longer necessary'''
     neighbors = [(-1,0), (1,0), (0,-1), (0,1), (-1,-1), (-1,1), (1,-1),(1,1)]
     segment = image_array[x,y]
     neighbor_segments = []
@@ -90,7 +100,15 @@ def get_histogram_threshold(image):
 
 
 if __name__ == "__main__":
-    img = import_berkeley("C:\\Users\\brydu\\OneDrive\\Desktop\\Comps\\Image-Segmentation-Senior-Seminar\\threshold_segments_truths\\293029.seg")
-    img = Image.fromarray(img * 50)
-    img.show()
+    '''When used as the main function, runs Otsu's grayspace on
+    our default image and displays it. Then runs multi Otsu's and
+    displays it'''
 
+    temp = Image.open("22093.jpg")
+    img = otsu_greyspace_thresholding(temp)
+    img = Image.fromarray(img * 255)
+    img.show()
+    
+    img2 = otsu_multi_greyspace_thresholding(temp, 3)
+    img2 = Image.fromarray(img2 * 100)
+    img2.show()
