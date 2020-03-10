@@ -1849,3 +1849,11 @@ a.tab-label.active-btn {
     background-position: center;
   }
 }
+
+code {
+    background-color: #eee;
+}
+
+code.primary {
+    color: red;
+}
