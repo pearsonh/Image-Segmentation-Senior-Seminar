@@ -5,42 +5,49 @@ from scipy.sparse import *
 from scipy.sparse.linalg import *
 import time
 from eval import bde, region_based_eval
-from parser import import_berkeley#, import_weizmann_1
+from parser import import_berkeley
 from tqdm import tqdm
 
 # compute difference between two pixels in the np array of rgb tuples by euclidean
-# distance between rgb values (or replace with some other metric in this method)
+# distance between rgb values and euclidean distance between pixel locations
 def differenceMetric(coords1, coords2, pixels):
     rgb1 = pixels[coords1[0], coords1[1]]
     rgb2 = pixels[coords2[0], coords2[1]]
     featureDifference = (rgb1[0] - rgb2[0])**2 + (rgb1[1] - rgb2[1])**2 + (rgb1[2] - rgb2[2])**2
     spatialDistance = (coords1[0] - coords2[0])**2 + (coords1[1] - coords2[1])**2
+    # feature weight and spatial weight correspond to the sigma values in the edge weight equation, can be tweaked
     featureWeight = 1
     spatialWeight = 1
-    #difference = math.exp(-(featureWeight * featureDifference + spatialWeight* spatialDistance))
+
+    # this version of the distance metric equation is what is specified in the Shi and Malik paper, but results in static images
+    # difference = math.exp(-(featureWeight * featureDifference + spatialWeight* spatialDistance))
+
+    # this version of the distance metric is wrong because it assigns higher weights
+    # to less similar pixels rather than lower weights. but this is the version that
+    # was used to run on all our images before the bug was caught.
     difference = featureWeight * featureDifference + spatialWeight* spatialDistance
     return difference
 
 # compute difference between two pixels in the np array of rgb tuples by euclidean
-# distance between rgb values (or replace with some other metric in this method)
+# distance between rgb values
 def differenceMetricSimple(coords1, coords2, pixels):
     rgb1 = pixels[coords1[0], coords1[1]]
     rgb2 = pixels[coords2[0], coords2[1]]
+    # this version of the distance metric is wrong because it assigns higher weights
+    # to less similar pixels rather than lower weights. but this is the version that
+    # was used to run on all our images before the bug was caught.
     return ((rgb1[0] - rgb2[0])**2 + (rgb1[1] - rgb2[1])**2 + (rgb1[2] - rgb2[2])**2)
 
 # D is the diagonal matrix and W is the adjacency matrix of edge weights (both csc sparse matrices)
 # uses scipy sparse linalg eigenvector solver for the Lanczos method
 # returns a tuple containing an array of eigenvalues and an array of eigenvectors
 def findEigens(D, W):
-    start = time.time()
     eigs = eigsh(inv(D)*(D - W))
-    stop = time.time()
-    #print("finding eigenvalues took ", stop-start, " seconds")
     return eigs
 
 # takes in an np array of pixels and returns a sparse adjacency matrix (csc_matrix) with edge weights for this image
 def pixelsToAdjMatrix(pixels):
-    r = 12
+    r = 12 # can be tweaked, 12 was the value used in running our experiments
     y,x,_ = pixels.shape #assuming tuples of 3 rgb values are the third coordinate of the shape
     N = x * y
     row = []
@@ -53,7 +60,7 @@ def pixelsToAdjMatrix(pixels):
             for k in range(i-r,i+r): # x coordinate of offset pixel
                 for l in range(j-r,j+r): # y coordinate of offset pixel
                     if k >= 0 and l >= 0 and k < x and l < y: # make sure this pixel isn't out of bounds
-                        diff = differenceMetricSimple((j,i), (l,k), pixels)
+                        diff = differenceMetricSimple((j,i), (l,k), pixels) # can swap in other difference metrics here
                         row.append(j*x + i) #add x coord to list of x coords
                         col.append(l*x + k) #add y coord to list of y coords
                         data.append(diff) #add the value that belongs at (j*x + i, l*x + k) in the adjacency matrix
@@ -62,11 +69,9 @@ def pixelsToAdjMatrix(pixels):
 # takes in a csc_matrix and returns a diagonal matrix (scipy.sparse.dia.dia_matrix) converted to a csc_matrix
 def adjMatrixToDiagMatrix(matrix):
     N, _ = matrix.shape
-    #sum outputs a numpy matrix of the same shape of matrix (so it's an array
-    #with an array inside), and I can't' figure out how to access just the first row of it
-    #other than by changing it to an np array first
     vec = np.array(matrix.sum(axis=0))[0]
-    # change any 0s on the diagonal to 1s (otherwise you can get a singular matrix) - should this be a different value than 1?
+    # change any 0s on the diagonal to 1s (otherwise you can get a singular matrix)
+    # didn't have time to decide if this was a good way to handle this case
     vec = np.where(vec != 0, vec, 1)
     return diags(vec, offsets=0).tocsc()
 
@@ -84,11 +89,11 @@ def mincut(img):
     eigVecIndicator = (eigVec > 0).astype(int)
     # reshape the indicator vector into a matrix the same shape as pixels
     newEigIndicator = np.reshape(eigVecIndicator, (y,x))
-    # for some reason the image only displays correctly if you make sure the type is uint8
     newEigIndicator = (newEigIndicator).astype('uint8')
     return newEigIndicator
 
 if __name__ == "__main__":
+    #sample run of mincut on a berkeley image
     filename = "15088.jpg"
     img = Image.open(filename)
     print(filename)
@@ -100,6 +105,5 @@ if __name__ == "__main__":
     img.show()
     img.save("15088-12-fweight.jpg", "JPEG")
     groundTruth = import_berkeley("15088.seg")
-    #groundTruth = import_weizmann_1("weizmann-duck-seg.jpg")
     print("region based is ", region_based_eval(groundTruth, array))
     print("edge based is ", bde(groundTruth, array))
