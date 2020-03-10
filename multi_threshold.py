@@ -8,7 +8,6 @@ from eval import bde
 import parser
 
 
-
 def otsu_greyspace_thresholding(image):
     #Creates a greyscale version of the input image
     imageGrey = image.convert(mode="L")
@@ -34,7 +33,7 @@ def otsu_greyspace_thresholding(image):
                 if imageGrey.getpixel((j,i)) > threshold[1]:
                     returnImage[i,j] = 2
 
-    return returnImage, segments
+    return returnImage
 
 def otsu_multi_greyspace_thresholding(image, segments):
     imageGrey = image.convert(mode="L")
@@ -90,102 +89,8 @@ def get_histogram_threshold(image):
     return np.where(a == threshold_otsu(a))
 
 
-
-
-
-
-def import_berkeley(filename):
-    '''Given the path to a file containing a Berkeley encoding of a segmentation,
-    returns the numpy version of that segmentation'''
-    linelist = None
-    with open(filename) as segFile:
-        linelist = [line for line in segFile]
-    i = 0
-    width = None
-    height = None
-    start_line = None
-    while not (width and height and start_line):
-        if linelist[i].startswith("width"):
-            width = int(linelist[i].split(" ")[1])
-        if linelist[i].startswith("height"):
-            height = int(linelist[i].split(" ")[1])
-        if linelist[i].startswith("data"):
-            start_line = i+1
-        i += 1
-    segarray = -np.ones((height,width))
-    for line in range(start_line,len(linelist)):
-        seg, row, start, end = linelist[line].split(" ")
-        for i in range(int(start),int(end)+1):
-            segarray[int(row),i] = int(seg)
-    return segarray
-
-
-def experiment():
-    location_segments = "C:\\Users\\brydu\\OneDrive\\Desktop\\Comps\\Image-Segmentation-Senior-Seminar\\threshold_segments\\"
-    location_truths = "C:\\Users\\brydu\\OneDrive\\Desktop\\Comps\\Image-Segmentation-Senior-Seminar\\threshold_segments_truths\\"
-
-    bde_accuracy_averages = {}
-    files = os.listdir(location_truths)
-    for file in files:
-        print("EXECUTING " + file)
-        segmentation = "segmentation" + file[:-4] + ".jpg"
-        seg = Image.open(location_segments + segmentation)
-        print("IMAGE OPENED")
-        seg = np.array(seg)
-        truth = import_berkeley(location_truths + file)
-        print("TRUTH IMPORTED")
-        accuracy = bde(seg, truth)
-        print(accuracy)
-        print("ACCURACY DISCOVERED")
-        bde_accuracy_averages[file] = accuracy
-    print(bde_accuracy_averages)
-
-
-
-
-
-
-
-def segment_all_images():
-    location = "C:/Users/brydu/OneDrive/Desktop/Comps/Image-Segmentation-Senior-Seminar/BSDS300-images/BSDS300/images/test/"
-    files = os.listdir(location)
-    for file in files:
-        img = Image.open(location + file)
-        temp, segments = otsu_greyspace_thresholding(img)
-        img = Image.fromarray(temp * 50)
-        img = img.convert("L")
-        img.save("C:/Users/brydu/OneDrive/Desktop/Comps/Image-Segmentation-Senior-Seminar/threshold_segments/segmentation" + file)
-
 if __name__ == "__main__":
     img = import_berkeley("C:\\Users\\brydu\\OneDrive\\Desktop\\Comps\\Image-Segmentation-Senior-Seminar\\threshold_segments_truths\\293029.seg")
     img = Image.fromarray(img * 50)
     img.show()
-    '''
-    images = []
-    color_thresholding_images = otsu_color_thresholding(img)
-    for segments in color_thresholding_images:
-        new_image = Image.fromarray(segments * 200)
-        new_image.show()
-        images.append(new_image)
-    new_image = Image.merge("RGB", tuple(images))
-    new_image.show();'''
-    #segment_all_images()
 
-
-'''def otsu_color_thresholding(image):
-
-    red = get_color_thresholds(image, "R")
-    blue = get_color_thresholds(image, "G")
-    green = get_color_thresholds(image, "B")
-    return (create_image(red, image, "R"), create_image(blue, image, "G"),create_image(green, image, "B"))
-
-def get_color_thresholds(image, color):
-    a = []
-    if color == "R":
-        a = np.array(image.histogram()[0:256])
-    elif color == "G":
-        a = np.array(image.histogram()[256:512])
-    else:
-        a = np.array(image.histogram()[512:768])
-    return np.where(a == threshold_otsu(a))
-    '''
