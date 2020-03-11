@@ -1857,3 +1857,9 @@ code {
 code.primary {
     color: red;
 }
+
+button.download {
+  background-color: SkyBlue;
+  border: none;
+  color:white;
+}
