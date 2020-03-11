@@ -145,12 +145,13 @@ def region_growing(img, seed, threshold):
         else:
             break
 
-    return segmented_img
+    seg = np.swapaxes(segmented_img,0,1)
+    seg = np.swapaxes(seg,1,0)
+    new_im = Image.fromarray(seg)
+    new_im.show()
+    # return seg
 
-def getSegments(seg):
-    '''Takes as input an already segmented image (an array with white or black values). Outputs an array of 0s and 1s for the segmented image, which is used to evaluate the segmentation against the ground truth.'''
-
-    a = np.copy(seg)
+    a = np.copy(new_im)
     a = a / 255
     a = a[:,:,0]
     return a
@@ -171,10 +172,9 @@ if __name__ == '__main__':
     newsize = (255,255)
     img = img.resize(newsize)
     # perform segmentation and show segmented image
-    seg = region_growing(img, seed, threshold)
-    seg = np.swapaxes(seg,0,1)
-    seg = np.swapaxes(seg,1,0)
-    new_im = Image.fromarray(seg)
-    new_im.show()
+    output = region_growing(img, seed, threshold)
+    # seg = np.swapaxes(seg,0,1)
+    # seg = np.swapaxes(seg,1,0)
+    # new_im = Image.fromarray(seg)
+
     # array of 1s and 0s for use in metrics
-    output = getSegments(new_im)

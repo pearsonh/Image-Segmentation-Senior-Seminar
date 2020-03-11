@@ -109,13 +109,14 @@ def watershed_with_merging(image,mergethreshold,blur=None):
 
 #just a plain old watershed segmentation, nothing unique about it
 def naive_watershed(image,blur=None):
-    #blurs input image
+    '''
+    plain old watershed. input an image and the amount of blur (optional) and it outputs the segmented image]
+    '''
     if blur:
         image = image.filter(ImageFilter.GaussianBlur(blur)) #blur
     #Creates a greyscale version of the input image
     imageGrey = image.convert(mode="L")
     imageGrey = np.array(imageGrey.getdata()).reshape(imageGrey.size[1],imageGrey.size[0])
-    #imageGrey = imageGrey - imageGrey%18 #round, now deprecated because I didn't think it was that good
     height, width = imageGrey.shape
     getNeighbors = lambda x,y: [i for i in [(x,y+1),(x,y-1),(x+1,y),(x-1,y)] if (i[0] >= 0 and i[1] >= 0 and i[0] < height and i[1] < width)] #this defines a function used to get the neighbors of a pixel
     curLabel = 2 # 0 is unlabelled. 1 is WALL
@@ -172,7 +173,11 @@ def naive_watershed(image,blur=None):
     return returnImage.astype('uint8')
 
 def watershed_with_wolf(image,depththreshold,blur=None):
-    #essentially, first executes watershed transform (collecting a bit of extra data), dynamically using wolf pruning in the process, then colors the image and sends it back
+    '''
+    essentially, first executes watershed transform (collecting a bit of extra data),
+    dynamically using wolf pruning in the process, then colors the image and sends it back.
+    input the image, depth threshold (for wolf pruning) and blur (optional)
+    '''
     #blurs input image
     if blur:
         image = image.filter(ImageFilter.GaussianBlur(blur)) #blur
