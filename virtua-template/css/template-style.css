@@ -1862,4 +1862,13 @@ button.download {
   background-color: SkyBlue;
   border: none;
   color:white;
+  margin-bottom: 10px;
+}
+
+.row {
+  display: flex;
+}
+
+.column {
+  flex: 50%;
 }
